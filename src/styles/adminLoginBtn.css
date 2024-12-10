@@ -1,0 +1,60 @@
+/* admin button */
+.admin-button {
+    position: fixed !important;
+    bottom: 20px;
+    right: 20px;
+    background-color: red;
+    color: white;
+    font-weight: bold;
+    padding: 15px;
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    position: relative;
+    animation: jumpTwiceRelax 4s infinite; /* 4-second cycle */
+}
+
+/* Hover effect */
+.admin-button:hover {
+    background-color: darkred;
+}
+
+/* Animation */
+@keyframes jumpTwiceRelax {
+    0% { transform: translateY(0); }
+    10% { transform: translateY(-15px); }
+    20% { transform: translateY(0); }
+    30% { transform: translateY(-15px); }
+    40% { transform: translateY(0); }
+    100% { transform: translateY(0); }
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .admin-button {
+        width: 100px;
+        height: 100px;
+        bottom: 10px;
+        right: 10px;
+        padding: 10px;
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    .admin-button {
+        width: 90px;
+        height: 90px;
+        bottom: 5px;
+        right: 5px;
+        padding: 8px;
+        font-size: 12px;
+    }
+}
