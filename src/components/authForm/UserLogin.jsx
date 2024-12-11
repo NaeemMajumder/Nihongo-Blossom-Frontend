@@ -56,7 +56,6 @@ const UserLogin = () => {
 
     if (validateForm()) {
       let form = e.target;
-
       let email = form.email.value;
       let password = form.password.value;
 

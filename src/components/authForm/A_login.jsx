@@ -1,5 +1,6 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useContext, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { AuthContext } from "../provider/AuthProvider";
 
 const A_login = () => {
   const [email, setEmail] = useState("");
@@ -7,14 +8,16 @@ const A_login = () => {
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
 
+  let { setAdmin, signInUser } = useContext(AuthContext);
+  let navigate = useNavigate();
+
   const validateEmail = (email) => {
     const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
     return emailRegex.test(email);
   };
 
   const validatePassword = (password) => {
-    const passwordRegex =
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    const passwordRegex = /^.{6,}$/;
     return passwordRegex.test(password);
   };
 
@@ -32,7 +35,22 @@ const A_login = () => {
     }
 
     if (validateEmail(email) && validatePassword(password)) {
-      // Perform login action here
+      let form = e.target;
+      let email = form.email.value;
+      let password = form.password.value;
+
+      console.log(email, password);
+
+      signInUser(email, password)
+        .then((currentUser) => {
+          console.log(currentUser.user);
+          setAdmin(currentUser.user);
+          navigate(location?.state ? location.state : "/admin");
+        })
+        .catch((error) => {
+          alert(error);
+        });
+
       console.log("Admin login successful");
     }
   };

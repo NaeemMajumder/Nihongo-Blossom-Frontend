@@ -14,6 +14,7 @@ import {
 export const AuthContext = createContext();
 
 const AuthProvider = ({ children }) => {
+  let [admin, setAdmin] = useState(null);
   let [user, setUser] = useState(null);
   let [loading, setLoading] = useState(true);
   const googleProvider = new GoogleAuthProvider();
@@ -52,6 +53,8 @@ const AuthProvider = ({ children }) => {
     signInUser,
     emailVerify,
     loading,
+    admin,
+    setAdmin
   };
 
   useEffect(() => {
