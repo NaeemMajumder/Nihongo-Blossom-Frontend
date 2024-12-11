@@ -1,6 +1,12 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../provider/AuthProvider";
 
 const UserRegistration = () => {
+
+  let {setUser, registerWithEmail, updateUserProfile, signInUser, registerWithGoogle, emailVerify } = useContext(AuthContext);
+  const navigate = useNavigate();
+
   const [userData, setUserData] = useState({
     name: "",
     email: "",
@@ -79,8 +85,33 @@ const UserRegistration = () => {
     let photoUrl = form.photoUrl.value;
     let password = form.password.value;
 
+    console.log(name, email, photoUrl, password)
 
-    // submit handle
+    registerWithEmail(email, password)
+    .then((result)=>{
+      setUser(result.user);
+      updateUserProfile({displayName:name, photoURL:photoUrl})
+      .then(()=>{
+
+        // Send email verification link
+        emailVerify(result)
+        .then(() => {
+          alert("Verification email sent! Please check your inbox.");
+          navigate("/login");
+        })
+        .catch((error) => {
+          alert("Error sending verification email: " + error.message);
+        });
+        
+      }).catch(error=>{
+        alert(error.message);
+      })
+    }).catch((error)=>{
+      alert(error.message);
+    })
+
+
+
   };
 
   return (

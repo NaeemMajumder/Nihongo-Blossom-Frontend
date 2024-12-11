@@ -8,6 +8,7 @@ import {
   updateProfile,
   GoogleAuthProvider,
   signInWithPopup,
+  sendEmailVerification,
 } from "firebase/auth";
 
 export const AuthContext = createContext();
@@ -37,6 +38,10 @@ const AuthProvider = ({ children }) => {
     return signInWithEmailAndPassword(auth, email, password);
   };
 
+  let emailVerify = (currentUser) =>{
+    return sendEmailVerification(auth.currentUser);
+  }
+
   let authInfo = {
     user,
     setUser,
@@ -45,6 +50,7 @@ const AuthProvider = ({ children }) => {
     updateUserProfile,
     logOutUser,
     signInUser,
+    emailVerify,
     loading,
   };
 

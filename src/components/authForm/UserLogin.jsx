@@ -5,7 +5,6 @@ import "../../styles/adminLoginBtn.css";
 import { AuthContext } from "../provider/AuthProvider";
 
 const UserLogin = () => {
-
   let { setUser, signInUser, registerWithGoogle } = useContext(AuthContext);
   const navigate = useNavigate();
   const location = useLocation();
@@ -66,7 +65,12 @@ const UserLogin = () => {
       signInUser(email, password)
         .then((currentUser) => {
           console.log(currentUser.user);
-          navigate(location?.state ? location.state : "/lessons");
+          if (currentUser.user.emailVerified) {
+            setUser(currentUser.user)
+            navigate(location?.state ? location.state : "/lessons");
+          }else{
+            alert("please verify your email address");
+          }
         })
         .catch((error) => {
           alert(error);
@@ -76,13 +80,14 @@ const UserLogin = () => {
     }
   };
 
-  const handleGoogleRegistration = ()=>{
+  const handleGoogleRegistration = () => {
     registerWithGoogle()
-    .then((result)=>{
-      console.log(result.user);
-      // navigate(location?.state ? location.state : "/");
-    }).catch(error=>alert(error.message));
-  }
+      .then((result) => {
+        console.log(result.user);
+        // navigate(location?.state ? location.state : "/");
+      })
+      .catch((error) => alert(error.message));
+  };
 
   // Admin Button Animation (auto jump every 2 seconds)
   useEffect(() => {
@@ -157,7 +162,8 @@ const UserLogin = () => {
 
           {/* Google Sign-In Button */}
           <div className="mt-6">
-            <button onClick={handleGoogleRegistration}
+            <button
+              onClick={handleGoogleRegistration}
               className="w-full flex items-center justify-center bg-white border-2 border-[#C9E5E9] text-[#164193] py-3 rounded-lg hover:bg-[#EDF8FA] transition duration-300"
               // Add Google Sign-In logic here
             >
