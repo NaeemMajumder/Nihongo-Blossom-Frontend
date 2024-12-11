@@ -72,6 +72,14 @@ const UserRegistration = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
+    let form = e.target;
+
+    let name = form.name.value;
+    let email = form.email.value;
+    let photoUrl = form.photoUrl.value;
+    let password = form.password.value;
+
+
     // submit handle
   };
 

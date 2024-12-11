@@ -1,8 +1,15 @@
-import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom"; // For navigation links
+import React, { useState, useEffect, useContext } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom"; // For navigation links
+import { FcGoogle } from "react-icons/fc";
 import "../../styles/adminLoginBtn.css";
+import { AuthContext } from "../provider/AuthProvider";
 
 const UserLogin = () => {
+
+  let { setUser, signInUser, registerWithGoogle } = useContext(AuthContext);
+  const navigate = useNavigate();
+  const location = useLocation();
+
   // States for form input and error handling
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -42,11 +49,40 @@ const UserLogin = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
+    // Check if the entered email is "admin@gmail.com"
+    if (email === "admin@gmail.com") {
+      alert("This is only for user login. Please go to the admin login form.");
+      return; // Prevent form submission
+    }
+
     if (validateForm()) {
-      // Logic for submitting the form
+      let form = e.target;
+
+      let email = form.email.value;
+      let password = form.password.value;
+
+      console.log(email, password);
+
+      signInUser(email, password)
+        .then((currentUser) => {
+          console.log(currentUser.user);
+          navigate(location?.state ? location.state : "/lessons");
+        })
+        .catch((error) => {
+          alert(error);
+        });
+
       console.log("Form submitted");
     }
   };
+
+  const handleGoogleRegistration = ()=>{
+    registerWithGoogle()
+    .then((result)=>{
+      console.log(result.user);
+      // navigate(location?.state ? location.state : "/");
+    }).catch(error=>alert(error.message));
+  }
 
   // Admin Button Animation (auto jump every 2 seconds)
   useEffect(() => {
@@ -66,7 +102,8 @@ const UserLogin = () => {
         <h2 className="text-3xl font-bold text-center text-[#164193] mb-6">
           Login
         </h2>
-        <form onSubmit={handleSubmit}>
+
+        <form onSubmit={handleSubmit} className="mt-4">
           <div className="mb-4">
             <label
               className="block text-[#164193] text-lg font-semibold"
@@ -77,6 +114,7 @@ const UserLogin = () => {
             <input
               type="email"
               id="email"
+              name="email"
               className="w-full p-3 border border-[#C9E5E9] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2262A6] focus:border-[#2262A6]"
               placeholder="Enter your email"
               value={email}
@@ -97,6 +135,7 @@ const UserLogin = () => {
             <input
               type="password"
               id="password"
+              name="password"
               className="w-full p-3 border border-[#C9E5E9] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2262A6] focus:border-[#2262A6]"
               placeholder="Enter your password"
               value={password}
@@ -114,6 +153,17 @@ const UserLogin = () => {
             >
               Forgot Password?
             </Link>
+          </div>
+
+          {/* Google Sign-In Button */}
+          <div className="mt-6">
+            <button onClick={handleGoogleRegistration}
+              className="w-full flex items-center justify-center bg-white border-2 border-[#C9E5E9] text-[#164193] py-3 rounded-lg hover:bg-[#EDF8FA] transition duration-300"
+              // Add Google Sign-In logic here
+            >
+              <FcGoogle className="text-2xl mr-3" />
+              Sign in with Google
+            </button>
           </div>
 
           <button
