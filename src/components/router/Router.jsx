@@ -9,6 +9,8 @@ import Dashboard from "../main/Dashboard.jsx";
 import A_allLessons from "../main/A_allLessons.jsx";
 import A_allVocabularies from "../main/A_allVocabularies.jsx";
 import A_allUsers from "../main/A_allUsers.jsx";
+import A_addLessons from "../main/A_addLessons.jsx";
+import A_addVocabulary from "../main/A_addVocabulary.jsx";
 
 export const router = createBrowserRouter([
     {
@@ -45,6 +47,14 @@ export const router = createBrowserRouter([
             {
                 path:'/admin/allUsers',
                 element:<A_allUsers />
+            },
+            {
+                path:'/admin/addLessons',
+                element:<A_addLessons />
+            },
+            {
+                path:'/admin/addVocabulary',
+                element:<A_addVocabulary />
             },
         ]
     },

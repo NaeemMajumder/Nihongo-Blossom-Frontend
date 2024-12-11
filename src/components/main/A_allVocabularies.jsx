@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 
 const A_allVocabularies = () => {
   // Sample vocabulary data (replace with dynamic data later)
@@ -61,44 +62,45 @@ const A_allVocabularies = () => {
             Manage Vocabularies
           </h1>
           <div className="flex gap-4 flex-wrap justify-center sm:justify-end">
-            <button className="bg-gradient-to-br from-[#3EB68D] to-[#2262A6] text-white px-6 py-2 rounded-lg text-lg font-semibold shadow-md hover:scale-105 transition-transform duration-300">
-              Add Vocabulary
-            </button>
+            <Link to={"/admin/addVocabulary"}>
+              <button className="bg-gradient-to-br from-[#3EB68D] to-[#2262A6] text-white px-6 py-2 rounded-lg text-lg font-semibold shadow-md hover:scale-105 transition-transform duration-300">
+                Add Vocabulary +
+              </button>
+            </Link>
           </div>
         </div>
 
-{/* Wrapper div for Total Vocabularies and Filter by Lesson */}
-<div className="flex flex-col sm:flex-row justify-between mb-6">
-  {/* Total Vocabularies Count */}
-  <div className="flex justify-center items-center w-full sm:w-auto">
-    <div className="bg-white shadow-md rounded-lg p-4 mb-6 sm:mb-0">
-      <h2 className="text-xl font-medium text-[#164193]">
-        Total Vocabularies:{" "}
-        <span className="text-[#3EB68D] font-semibold">
-          {filteredVocabularies.length}
-        </span>
-      </h2>
-    </div>
-  </div>
+        {/* Wrapper div for Total Vocabularies and Filter by Lesson */}
+        <div className="flex flex-col sm:flex-row justify-between mb-6">
+          {/* Total Vocabularies Count */}
+          <div className="flex justify-center items-center w-full sm:w-auto">
+            <div className="bg-white shadow-md rounded-lg p-4 mb-6 sm:mb-0">
+              <h2 className="text-xl font-medium text-[#164193]">
+                Total Vocabularies:{" "}
+                <span className="text-[#3EB68D] font-semibold">
+                  {filteredVocabularies.length}
+                </span>
+              </h2>
+            </div>
+          </div>
 
-  {/* Filter by Lesson */}
-  <div className="bg-white inline-block shadow-md rounded-lg p-4 mb-6 sm:mb-0 w-full sm:w-auto">
-    <h2 className="text-xl font-medium text-[#164193]">
-      Filter by Lesson Number
-    </h2>
-    <select
-      className="mt-2 p-2 bg-[#EDF8FA] text-[#164193] border-2 border-[#2262A6] rounded-lg"
-      value={filteredLesson}
-      onChange={(e) => setFilteredLesson(e.target.value)}
-    >
-      <option value="">All Lessons</option>
-      <option value="1">Lesson 1</option>
-      <option value="2">Lesson 2</option>
-      <option value="3">Lesson 3</option>
-    </select>
-  </div>
-</div>
-
+          {/* Filter by Lesson */}
+          <div className="bg-white inline-block shadow-md rounded-lg p-4 mb-6 sm:mb-0 w-full sm:w-auto">
+            <h2 className="text-xl font-medium text-[#164193]">
+              Filter by Lesson Number
+            </h2>
+            <select
+              className="mt-2 p-2 bg-[#EDF8FA] text-[#164193] border-2 border-[#2262A6] rounded-lg"
+              value={filteredLesson}
+              onChange={(e) => setFilteredLesson(e.target.value)}
+            >
+              <option value="">All Lessons</option>
+              <option value="1">Lesson 1</option>
+              <option value="2">Lesson 2</option>
+              <option value="3">Lesson 3</option>
+            </select>
+          </div>
+        </div>
 
         {/* Vocabulary Table */}
         <div className="overflow-x-auto bg-white rounded-lg shadow-lg">

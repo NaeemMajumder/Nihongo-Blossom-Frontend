@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 const A_allLessons = () => {
   // Sample lesson data (replace with dynamic data later)
@@ -19,9 +20,11 @@ const A_allLessons = () => {
             Manage Lessons
           </h1>
           <div className="flex gap-4 flex-wrap justify-center sm:justify-end">
-            <button className="bg-gradient-to-br from-[#3EB68D] to-[#2262A6] text-white px-6 py-2 rounded-lg text-lg font-semibold shadow-md hover:scale-105 transition-transform duration-300">
-              Add Lesson
-            </button>
+            <Link to={'/admin/addLessons'}>
+              <button className="bg-gradient-to-br from-[#3EB68D] to-[#2262A6] text-white px-6 py-2 rounded-lg text-lg font-semibold shadow-md hover:scale-105 transition-transform duration-300">
+                Add Lesson +
+              </button>
+            </Link>
           </div>
         </div>
 
@@ -29,7 +32,9 @@ const A_allLessons = () => {
         <div className="bg-white inline-block shadow-md rounded-lg p-4 mb-6">
           <h2 className="text-xl font-medium text-[#164193]">
             Total Lessons:{" "}
-            <span className="text-[#3EB68D] font-semibold">{lessons.length}</span>
+            <span className="text-[#3EB68D] font-semibold">
+              {lessons.length}
+            </span>
           </h2>
         </div>
 
