@@ -36,7 +36,12 @@ const AdminNav = () => {
                   <NavLink to={"/admin/allLessons"}>All Lessons</NavLink>
                 </li>
                 <li>
-                  <NavLink to={"/admin/allVocabularies"}>All Vocabulary</NavLink>
+                  <NavLink to={"/admin/allVocabularies"}>
+                    All Vocabulary
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink to={"/admin/allTutorials"}>All Tutorials</NavLink>
                 </li>
                 <li>
                   <NavLink to={"/admin/allUsers"}>All Users</NavLink>
@@ -54,6 +59,9 @@ const AdminNav = () => {
               </li>
               <li>
                 <NavLink to={"/admin/allVocabularies"}>All Vocabulary</NavLink>
+              </li>
+              <li>
+                <NavLink to={"/admin/allTutorials"}>All Tutorials</NavLink>
               </li>
               <li>
                 <NavLink to={"/admin/allUsers"}>All Users</NavLink>

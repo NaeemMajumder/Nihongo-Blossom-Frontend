@@ -14,6 +14,8 @@ import A_addVocabulary from "../main/A_addVocabulary.jsx";
 import UserAllLessons from "../main/UserAllLessons.jsx";
 import Demo from "../../demo.jsx";
 import UserAllTutorials from "../main/UserAllTutorials.jsx";
+import A_allTutorials from "../main/A_allTutorials.jsx";
+
 
 export const router = createBrowserRouter([
     {
@@ -61,6 +63,10 @@ export const router = createBrowserRouter([
             {
                 path:'/admin/allVocabularies',
                 element:<A_allVocabularies />
+            },
+            {
+                path:'/admin/allTutorials',
+                element:<A_allTutorials />
             },
             {
                 path:'/admin/allUsers',
