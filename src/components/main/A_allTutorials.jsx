@@ -10,9 +10,9 @@ const A_allTutorials = () => {
       id: "https://www.youtube.com/embed/AX6OrbgS8lI?si=Pvvjp27na_Mlzkvf",
       title: "Japanese Greetings Japanese Greetings Japanese Greetings",
     },
-    { id: "your_video_id_2", title: "Basic Japanese Phrases" },
-    { id: "your_video_id_3", title: "Learning Hiragana" },
-    { id: "your_video_id_4", title: "Kanji Basics" },
+    { id: "https://www.youtube.com/watch?v=AX6OrbgS8lI&list=RD-qLQ10H9gfA&index=2", title: "Basic Japanese Phrases" },
+    { id: "https://www.youtube.com/watch?si=Pvvjp27na_Mlzkvf", title: "Learning Hiragana" },
+    { id: "https://www.youtube.com/embed/RRBF2YWXFtY?si=7UA8XzMbPb947Q1w", title: "title"},
     { id: "your_video_id_5", title: "Introduction to Japanese Culture" },
     { id: "your_video_id_6", title: "Japanese Grammar Tips" },
     { id: "your_video_id_7", title: "Essential Japanese Vocabulary" },
@@ -60,7 +60,7 @@ const A_allTutorials = () => {
 
         {/* Add Tutorial Button */}
         <div className="flex items-center">
-          <Link to="/admin/add-tutorial">
+          <Link to="/admin/addTutorial">
           <button className="bg-gradient-to-br from-[#3EB68D] to-[#2262A6] text-white px-6 py-2 rounded-lg text-lg font-semibold shadow-md hover:scale-105 transition-transform duration-300">
                 Add Tutorials +
               </button>
