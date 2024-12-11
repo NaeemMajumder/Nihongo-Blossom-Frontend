@@ -1,55 +1,17 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLoaderData } from "react-router-dom";
 
 const A_allVocabularies = () => {
-  // Sample vocabulary data (replace with dynamic data later)
-  const vocabularies = [
-    {
-      id: 1,
-      word: "こんにちは",
-      meaning: "Hello",
-      pronunciation: "Konnichiwa",
-      whenToSay: "Used for greeting",
-      lessonNo: 1,
-    },
-    {
-      id: 2,
-      word: "ありがとうございます",
-      meaning: "Thank you",
-      pronunciation: "Arigatou gozaimasu",
-      whenToSay: "Used to express gratitude",
-      lessonNo: 1,
-    },
-    {
-      id: 3,
-      word: "さようなら",
-      meaning: "Goodbye",
-      pronunciation: "Sayounara",
-      whenToSay: "Used when parting",
-      lessonNo: 2,
-    },
-    {
-      id: 4,
-      word: "おはよう",
-      meaning: "Good morning",
-      pronunciation: "Ohayou",
-      whenToSay: "Used in the morning",
-      lessonNo: 2,
-    },
-    {
-      id: 5,
-      word: "すみません",
-      meaning: "Excuse me",
-      pronunciation: "Sumimasen",
-      whenToSay: "Used for apologizing",
-      lessonNo: 3,
-    },
-  ];
+  const { allVocabularies, lessons } = useLoaderData();
+
+  console.log(allVocabularies);
+  console.log(lessons);
+
 
   const [filteredLesson, setFilteredLesson] = useState("");
 
   // Filter vocabularies based on lesson number
-  const filteredVocabularies = vocabularies.filter(
+  const filteredVocabularies = allVocabularies.filter(
     (vocab) => !filteredLesson || vocab.lessonNo === parseInt(filteredLesson)
   );
 
@@ -95,9 +57,12 @@ const A_allVocabularies = () => {
               onChange={(e) => setFilteredLesson(e.target.value)}
             >
               <option value="">All Lessons</option>
-              <option value="1">Lesson 1</option>
-              <option value="2">Lesson 2</option>
-              <option value="3">Lesson 3</option>
+              {lessons.map((lesson, index) => (
+                // Assuming lesson has a lessonNumber or lessonTitle property
+                <option key={index} value={lesson.lessonNumber}>
+                  Lesson {lesson.lessonNumber}
+                </option>
+              ))}
             </select>
           </div>
         </div>
@@ -116,9 +81,9 @@ const A_allVocabularies = () => {
               </tr>
             </thead>
             <tbody>
-              {filteredVocabularies.map((vocab) => (
+              {filteredVocabularies.map((vocab, index) => (
                 <tr
-                  key={vocab.id}
+                  key={index}
                   className="border-b border-[#2262A6] hover:bg-[#C9E5E9]"
                 >
                   <td className="p-4">{vocab.word}</td>

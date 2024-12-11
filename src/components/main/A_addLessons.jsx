@@ -1,13 +1,32 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const A_addLessons = () => {
   const [lessonName, setLessonName] = useState("");
   const [lessonNumber, setLessonNumber] = useState("");
 
+  let navigate = useNavigate()
+
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("Lesson Created:", { lessonName, lessonNumber });
+
+    let newLessons = {lessonName, lessonNumber};
+
     // Add logic to handle lesson creation, like making an API request
+
+    fetch("http://localhost:8080/admin/allLessons",{
+      method:"POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(newLessons),
+    })
+    .then(res=>res.json())
+    .then(data=>{
+      console.log(data);
+      navigate("/admin/allLessons")
+    })
   };
 
   return (

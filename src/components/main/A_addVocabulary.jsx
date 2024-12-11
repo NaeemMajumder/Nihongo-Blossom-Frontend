@@ -1,6 +1,10 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const A_addVocabulary = () => {
+
+  let navigate = useNavigate();
+
   const [word, setWord] = useState("");
   const [meaning, setMeaning] = useState("");
   const [pronunciation, setPronunciation] = useState("");
@@ -10,7 +14,21 @@ const A_addVocabulary = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("Vocabulary Created:", { word, meaning, pronunciation, whenToSay, lessonNo });
-    // Add logic to handle vocabulary creation, like making an API request
+    let newVocabulary = { word, meaning, pronunciation, whenToSay, lessonNo };
+    console.log(newVocabulary);
+
+    fetch("http://localhost:8080/admin/allVocabularies",{
+      method:"POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(newVocabulary),
+    })
+    .then(res=>res.json())
+    .then(data=>{
+      console.log(data);
+      navigate("/admin/allVocabularies")
+    })
   };
 
   return (

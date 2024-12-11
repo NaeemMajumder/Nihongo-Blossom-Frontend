@@ -1,18 +1,21 @@
 import React from "react";
-import { Link } from "react-router-dom"; // For navigation
+import { Link, useLoaderData } from "react-router-dom"; // For navigation
 import { FaArrowLeft } from "react-icons/fa";
 import { FaEdit, FaTrash } from "react-icons/fa"; // For edit and delete icons
 
 const A_allTutorials = () => {
+
+  let allTutorials = useLoaderData();
+  console.log(allTutorials);
   // Array of YouTube video IDs and their titles
   const videoLinks = [
     {
-      id: "https://www.youtube.com/embed/AX6OrbgS8lI?si=Pvvjp27na_Mlzkvf",
+      id: "asd",
       title: "Japanese Greetings Japanese Greetings Japanese Greetings",
     },
-    { id: "https://www.youtube.com/watch?v=AX6OrbgS8lI&list=RD-qLQ10H9gfA&index=2", title: "Basic Japanese Phrases" },
-    { id: "https://www.youtube.com/watch?si=Pvvjp27na_Mlzkvf", title: "Learning Hiragana" },
-    { id: "https://www.youtube.com/embed/RRBF2YWXFtY?si=7UA8XzMbPb947Q1w", title: "title"},
+    { id: "asdf", title: "Basic Japanese Phrases" },
+    { id: "asdf", title: "Learning Hiragana" },
+    { id: "asdf", title: "title"},
     { id: "your_video_id_5", title: "Introduction to Japanese Culture" },
     { id: "your_video_id_6", title: "Japanese Grammar Tips" },
     { id: "your_video_id_7", title: "Essential Japanese Vocabulary" },
@@ -69,8 +72,8 @@ const A_allTutorials = () => {
       </div>
 
       {/* Tutorial Videos */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-8 w-full max-w-6xl">
-        {videoLinks.map((video, index) => (
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-8 w-full max-w-6xl mb-20">
+        {allTutorials.map((video, index) => (
           <div
             key={index}
             className="bg-white shadow-lg rounded-lg overflow-hidden"
@@ -79,7 +82,7 @@ const A_allTutorials = () => {
             <iframe
               width="100%"
               height="315"
-              src={video.id}
+              src={video.videoURL}
               title={`Japanese Tutorial ${index + 1}`}
               frameBorder="0"
               allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
@@ -90,7 +93,7 @@ const A_allTutorials = () => {
             <div className="p-4 flex justify-between items-center">
               <div>
                 <h3 className="text-xl font-semibold text-[#164193]">
-                  {video.title}
+                  {video.videoTitle}
                 </h3>
               </div>
               <div className="flex gap-3">

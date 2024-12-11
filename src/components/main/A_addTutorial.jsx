@@ -1,11 +1,13 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom"; // For navigation
+import { Link, useNavigate } from "react-router-dom"; // For navigation
 import { FaArrowLeft } from "react-icons/fa";
 
 const A_addTutorial = () => {
+
+  let navigate = useNavigate();
+
   const [videoEmbedCode, setVideoEmbedCode] = useState("");
   const [videoTitle, setVideoTitle] = useState("");
-  const [videoURL, setVideoURL] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -15,10 +17,24 @@ const A_addTutorial = () => {
     const match = videoEmbedCode.match(regex);
 
     if (match && match[1]) {
-      setVideoURL(match[1]);
       console.log("Tutorial Created:", { videoURL: match[1], videoTitle });
+      let newTutorial = { videoURL: match[1], videoTitle };
+      console.log(newTutorial)
+
+      fetch("http://localhost:8080/admin/allTutorials",{
+        method:"POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newTutorial),
+      })
+      .then(res=>res.json())
+      .then(data=>{
+        console.log(data);
+        navigate("/admin/allTutorials")
+      })
     } else {
-      console.error("Invalid iframe embed code");
+      alert("Invalid iframe embed code");
     }
 
     // Add logic to handle tutorial creation, like making an API request

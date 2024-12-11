@@ -1,5 +1,5 @@
 import { createBrowserRouter } from "react-router-dom";
-import App from "../../App.jsx"
+import App from "../../App.jsx";
 import UserLogin from "../authForm/UserLogin.jsx";
 import UserRegistration from "../authForm/UserRegistration.jsx";
 import A_login from "../authForm/A_login.jsx";
@@ -17,84 +17,98 @@ import UserAllTutorials from "../main/UserAllTutorials.jsx";
 import A_allTutorials from "../main/A_allTutorials.jsx";
 import A_addTutorial from "../main/A_addTutorial.jsx";
 
-
 export const router = createBrowserRouter([
-    {
-        path:'/',
-        element: <App />,
-        errorElement: <Error />,
-        children:[
-            {
-                path:'/lessons',
-                element:<UserAllLessons />
-            },
-            {
-                path:'/tutorials',
-                element:<UserAllTutorials />
-            },
-            {
-                path:'/demo',
-                element: <Demo />
-            },
-        
-        ]
-    },
-    {
-        path:'/login',
-        element: <UserLogin />
-    },
-    {
-        path:'/register',
-        element: <UserRegistration />
-    },
+  {
+    path: "/",
+    element: <App />,
+    errorElement: <Error />,
+    children: [
+      {
+        path: "/lessons",
+        element: <UserAllLessons />,
+      },
+      {
+        path: "/tutorials",
+        element: <UserAllTutorials />,
+      },
+      {
+        path: "/demo",
+        element: <Demo />,
+      },
+    ],
+  },
+  {
+    path: "/login",
+    element: <UserLogin />,
+  },
+  {
+    path: "/register",
+    element: <UserRegistration />,
+  },
 
-    // admin
-    {
-        path:'/admin',
-        element:<Admin />,
-        children:[
-            {
-                path:'/admin',
-                element:<Dashboard></Dashboard>
-            },
-            {
-                path:'/admin/allLessons',
-                element:<A_allLessons />
-            },
-            {
-                path:'/admin/allVocabularies',
-                element:<A_allVocabularies />
-            },
-            {
-                path:'/admin/allTutorials',
-                element:<A_allTutorials />
-            },
-            {
-                path:'/admin/allUsers',
-                element:<A_allUsers />
-            },
-            {
-                path:'/admin/addLessons',
-                element:<A_addLessons />
-            },
-            {
-                path:'/admin/addVocabulary',
-                element:<A_addVocabulary />
-            },
-            {
-                path:'/admin/addTutorial',
-                element:<A_addTutorial />
-            },
-        ]
-    },
-    {
-        path:'/admin/login',
-        element: <A_login />
-    },
+  // admin
+  {
+    path: "/admin",
+    element: <Admin />,
+    children: [
+      {
+        path: "/admin",
+        element: <Dashboard></Dashboard>,
+      },
+      {
+        path: "/admin/allLessons",
+        element: <A_allLessons />,
+        loader: () => fetch(`http://localhost:8080/admin/allLessons`),
+      },
+      {
+        path: "/admin/allVocabularies",
+        element: <A_allVocabularies />,
+        loader: async () => {
+          // Fetch both vocabularies and lessons concurrently
+          const [vocabulariesResponse, lessonsResponse] = await Promise.all([
+            fetch("http://localhost:8080/admin/allVocabularies"),
+            fetch("http://localhost:8080/admin/allLessons"),
+          ]);
 
-    // error
-    {
-        path:"*",
-        element: <Error />
-    }
-])
+          // Parse both responses as JSON
+          const allVocabularies = await vocabulariesResponse.json();
+          const lessons = await lessonsResponse.json();
+
+          // Return both vocabularies and lessons
+          return { allVocabularies, lessons };
+        },
+      },
+      {
+        path: "/admin/allTutorials",
+        element: <A_allTutorials />,
+        loader: () => fetch(`http://localhost:8080/admin/allTutorials`),
+      },
+      {
+        path: "/admin/allUsers",
+        element: <A_allUsers />,
+      },
+      {
+        path: "/admin/addLessons",
+        element: <A_addLessons />,
+      },
+      {
+        path: "/admin/addVocabulary",
+        element: <A_addVocabulary />,
+      },
+      {
+        path: "/admin/addTutorial",
+        element: <A_addTutorial />,
+      },
+    ],
+  },
+  {
+    path: "/admin/login",
+    element: <A_login />,
+  },
+
+  // error
+  {
+    path: "*",
+    element: <Error />,
+  },
+]);

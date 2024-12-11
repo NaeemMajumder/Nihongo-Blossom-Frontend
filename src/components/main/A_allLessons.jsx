@@ -1,7 +1,10 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLoaderData } from "react-router-dom";
 
 const A_allLessons = () => {
+
+  let allLessons = useLoaderData();
+  console.log(allLessons);
   // Sample lesson data (replace with dynamic data later)
   const lessons = [
     { id: 1, name: "Basic Greetings", number: 1, vocabCount: 12 },
@@ -101,13 +104,13 @@ const A_allLessons = () => {
               className="bg-white shadow-lg rounded-lg p-6 hover:scale-105 transform transition-transform duration-300"
             >
               <h3 className="text-xl font-semibold text-[#3EB68D] mb-2">
-                {lesson.name}
+                {lesson?.name}
               </h3>
               <p className="text-[#2262A6] mb-1">
-                <strong>Lesson Number:</strong> {lesson.number}
+                <strong>Lesson Number:</strong> {lesson?.number}
               </p>
               <p className="text-[#2262A6]">
-                <strong>Vocabulary Count:</strong> {lesson.vocabCount}
+                <strong>Vocabulary Count:</strong> {lesson?.vocabCount}
               </p>
               <div className="flex justify-between mt-4 gap-2">
                 <Link to={`/admin/lessonDetails/${lesson.id}`}>
