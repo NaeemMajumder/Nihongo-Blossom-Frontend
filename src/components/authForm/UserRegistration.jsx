@@ -1,11 +1,18 @@
 import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../provider/AuthProvider";
+import { FaEye, FaEyeSlash  } from "react-icons/fa";
 
 const UserRegistration = () => {
-
-  let {setUser, registerWithEmail, updateUserProfile, signInUser, registerWithGoogle, emailVerify } = useContext(AuthContext);
+  let {
+    setUser,
+    registerWithEmail,
+    updateUserProfile,
+    emailVerify,
+  } = useContext(AuthContext);
   const navigate = useNavigate();
+
+  let [showPass, setShowPass] = useState(false);
 
   const [userData, setUserData] = useState({
     name: "",
@@ -85,33 +92,30 @@ const UserRegistration = () => {
     let photoUrl = form.photoUrl.value;
     let password = form.password.value;
 
-    console.log(name, email, photoUrl, password)
+    console.log(name, email, photoUrl, password);
 
     registerWithEmail(email, password)
-    .then((result)=>{
-      setUser(result.user);
-      updateUserProfile({displayName:name, photoURL:photoUrl})
-      .then(()=>{
-
-        // Send email verification link
-        emailVerify(result)
-        .then(() => {
-          alert("Verification email sent! Please check your inbox.");
-          navigate("/login");
-        })
-        .catch((error) => {
-          alert("Error sending verification email: " + error.message);
-        });
-        
-      }).catch(error=>{
-        alert(error.message);
+      .then((result) => {
+        setUser(result.user);
+        updateUserProfile({ displayName: name, photoURL: photoUrl })
+          .then(() => {
+            // Send email verification link
+            emailVerify(result)
+              .then(() => {
+                alert("Verification email sent! Please check your inbox.");
+                navigate("/login");
+              })
+              .catch((error) => {
+                alert("Error sending verification email: " + error.message);
+              });
+          })
+          .catch((error) => {
+            alert(error.message);
+          });
       })
-    }).catch((error)=>{
-      alert(error.message);
-    })
-
-
-
+      .catch((error) => {
+        alert(error.message);
+      });
   };
 
   return (
@@ -187,7 +191,7 @@ const UserRegistration = () => {
             </div>
 
             {/* Password Input */}
-            <div className="mt-4">
+            <div className="mt-4 relative">
               <label
                 htmlFor="password"
                 className="block text-sm font-semibold text-[#2262A6]"
@@ -195,7 +199,7 @@ const UserRegistration = () => {
                 Password
               </label>
               <input
-                type="password"
+                type={showPass?"text":"password"}
                 id="password"
                 name="password"
                 value={userData.password}
@@ -203,6 +207,13 @@ const UserRegistration = () => {
                 placeholder="Enter your password"
                 className="w-full p-2 border border-[#2262A6] rounded-md mt-2"
               />
+              <div className="absolute top-[43px] right-4 cursor-pointer">
+                {showPass ? (
+                  <FaEye onClick={() => setShowPass(false)} />
+                ) : (
+                  <FaEyeSlash onClick={() => setShowPass(true)} />
+                )}
+              </div>
               {/* Password Validation */}
               <div className="mt-2 text-xs text-[#2262A6]">
                 <ul className="grid grid-cols-2 gap-2">

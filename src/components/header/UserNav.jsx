@@ -1,7 +1,19 @@
-import React from "react";
-import { NavLink } from "react-router-dom";
+import React, { useContext } from "react";
+import { Navigate, NavLink, useNavigate } from "react-router-dom";
+import { AuthContext } from "../provider/AuthProvider";
 
 const UserNav = () => {
+
+  let { user,logOutUser } = useContext(AuthContext);
+  let navigate = useNavigate();
+
+  let handleLogOut = ()=>{
+    logOutUser().then(()=>{
+      navigate("/login")
+      alert("You are Logged Out")
+    }).catch((error)=>alert(error.message));
+  }
+
   return (
     <>
       <nav>
@@ -63,7 +75,7 @@ const UserNav = () => {
                 className="btn btn-ghost btn-circle overflow-hidden"
               >
                 <div className="indicator">
-                  <img src="/images/avter.jpg" alt="" />
+                  <img src={user?.photoURL?user.photoURL:"/images/avter.jpg"} alt="" />
                 </div>
               </div>
               <div
@@ -71,13 +83,13 @@ const UserNav = () => {
                 className="card card-compact dropdown-content bg-base-100 z-[1] mt-3 shadow"
               >
                 <div className="card-body">
-                  <span className="text-lg font-bold">Naeem Majumder</span>
-                  <span className="text-info">naeemmajumder00@gmail.com</span>
+                  <span className="text-lg font-bold">{user?.displayName}</span>
+                  <span className="text-info">{user?.email}</span>
                   <div className="card-actions flex flex-col space-y-2">
                     <button className="w-full py-2 px-6 text-white font-semibold text-lg rounded-lg bg-[#3AB092] hover:scale-105 transform transition-all duration-300">
                       Your Profile
                     </button>
-                    <button className="w-full py-2 px-6 text-white font-semibold text-lg rounded-lg bg-gradient-to-br from-[#164193] to-[#00a9ff] hover:scale-105 transform transition-all duration-300 lg:hidden">
+                    <button onClick={handleLogOut} className="w-full py-2 px-6 text-white font-semibold text-lg rounded-lg bg-gradient-to-br from-[#164193] to-[#00a9ff] hover:scale-105 transform transition-all duration-300 lg:hidden">
                       Log Out
                     </button>
                   </div>
