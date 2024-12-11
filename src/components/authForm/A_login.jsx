@@ -7,12 +7,13 @@ const A_login = () => {
   const [password, setPassword] = useState("");
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
+  const [showBanner, setShowBanner] = useState(true); // State to handle the banner visibility
 
   let { setAdmin, signInUser } = useContext(AuthContext);
   let navigate = useNavigate();
 
   const validateEmail = (email) => {
-    const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+    const emailRegex = /^[a-zA-Z0-9._-]+@[a-zAAT0-9.-]+\.[a-zA-Z]{2,6}$/;
     return emailRegex.test(email);
   };
 
@@ -55,9 +56,29 @@ const A_login = () => {
     }
   };
 
+  // Close the banner when the admin clicks the "Close" button
+  const closeBanner = () => {
+    setShowBanner(false);
+  };
+
   return (
     <div className="min-h-screen flex justify-center items-center bg-[#faf6ed]">
-      <div className="w-full max-w-md p-8 bg-white rounded-lg shadow-md">
+
+      {/* Banner / Info Div */}
+      {showBanner && (
+        <div className="w-full bg-yellow-500 text-black text-center p-4 fixed top-0 left-0 z-50 flex justify-between items-center px-4 md:px-8">
+          <span>email: admin@gmail.com<br />password: adminadmin</span>
+          <button
+            onClick={closeBanner}
+            className="text-white text-xl cursor-pointer hover:text-gray-200"
+          >
+            &times;
+          </button>
+        </div>
+      )}
+
+      {/* Login Form */}
+      <div className="w-full max-w-md p-8 bg-white rounded-lg shadow-md mt-20 md:mt-32">
         <h2 className="text-3xl font-semibold text-center text-yellow-500 mb-6">
           Admin Login
         </h2>
