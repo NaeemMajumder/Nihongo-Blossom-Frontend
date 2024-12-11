@@ -11,12 +11,30 @@ import A_allVocabularies from "../main/A_allVocabularies.jsx";
 import A_allUsers from "../main/A_allUsers.jsx";
 import A_addLessons from "../main/A_addLessons.jsx";
 import A_addVocabulary from "../main/A_addVocabulary.jsx";
+import UserAllLessons from "../main/UserAllLessons.jsx";
+import Demo from "../../demo.jsx";
+import UserAllTutorials from "../main/UserAllTutorials.jsx";
 
 export const router = createBrowserRouter([
     {
         path:'/',
         element: <App />,
         errorElement: <Error />,
+        children:[
+            {
+                path:'/lessons',
+                element:<UserAllLessons />
+            },
+            {
+                path:'/tutorials',
+                element:<UserAllTutorials />
+            },
+            {
+                path:'/demo',
+                element: <Demo />
+            },
+        
+        ]
     },
     {
         path:'/login',

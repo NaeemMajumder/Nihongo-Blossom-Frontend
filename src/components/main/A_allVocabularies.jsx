@@ -127,7 +127,12 @@ const A_allVocabularies = () => {
                   <td className="p-4">{vocab.whenToSay}</td>
                   <td className="p-4">{vocab.lessonNo}</td>
                   <td className="p-4">
-                    <button className="bg-gradient-to-br from-[#164193] to-[#00a9ff] text-white px-4 py-2 rounded-md shadow-md hover:opacity-90 transition-opacity mr-2 mb-2 lg:mb-0 ">
+                    <Link to={`/admin/vocabularyDetails/${vocab.id}`}>
+                      <button className="bg-gradient-to-br from-[#3EB68D] to-[#2262A6] text-white px-4 py-2 rounded-md shadow-md hover:opacity-90 transition-opacity mr-2 mb-2 lg:mb-0">
+                        Details
+                      </button>
+                    </Link>
+                    <button className="bg-gradient-to-br from-[#164193] to-[#00a9ff] text-white px-4 py-2 rounded-md shadow-md hover:opacity-90 transition-opacity mr-2 mb-2 lg:mb-0">
                       Edit
                     </button>
                     <button className="bg-red-500 text-white px-4 py-2 rounded-md shadow-md hover:bg-red-600 transition">

@@ -31,7 +31,7 @@ const A_allLessons = () => {
         {/* Total Lessons Count */}
         <div className="bg-white inline-block shadow-md rounded-lg p-4 mb-6">
           <h2 className="text-xl font-medium text-[#164193]">
-            Total Lessons:{" "}
+            Total Lessons: {" "}
             <span className="text-[#3EB68D] font-semibold">
               {lessons.length}
             </span>
@@ -54,7 +54,12 @@ const A_allLessons = () => {
               <p className="text-[#2262A6]">
                 <strong>Vocabulary Count:</strong> {lesson.vocabCount}
               </p>
-              <div className="flex justify-between mt-4">
+              <div className="flex justify-between mt-4 gap-2">
+                <Link to={`/admin/lessonDetails/${lesson.id}`}>
+                  <button className="bg-gradient-to-br from-[#3EB68D] to-[#164193] text-white px-4 py-2 rounded-md shadow-md hover:opacity-90 transition-opacity">
+                    Details
+                  </button>
+                </Link>
                 <button className="bg-gradient-to-br from-[#164193] to-[#00a9ff] text-white px-4 py-2 rounded-md shadow-md hover:opacity-90 transition-opacity">
                   Edit
                 </button>

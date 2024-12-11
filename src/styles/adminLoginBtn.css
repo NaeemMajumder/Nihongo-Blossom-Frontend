@@ -58,3 +58,16 @@
         font-size: 12px;
     }
 }
+
+
+/* show lesson details vocabulary 350px button  */
+@media (max-width: 350px) {
+    .button-container {
+      flex-direction: column !important;
+      gap: 16px !important; /* Adjust the space between buttons */
+    }
+    .button-container button {
+      width: 100% !important; /* Make buttons take full width on small screens */
+    }
+  }
+  
