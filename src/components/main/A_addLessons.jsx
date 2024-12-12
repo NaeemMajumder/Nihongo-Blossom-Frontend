@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const A_addLessons = () => {
   const [lessonName, setLessonName] = useState("");
@@ -9,8 +10,6 @@ const A_addLessons = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Lesson Created:", { lessonName, lessonNumber });
-
     let newLessons = {lessonName, lessonNumber};
 
     // Add logic to handle lesson creation, like making an API request
@@ -24,8 +23,8 @@ const A_addLessons = () => {
     })
     .then(res=>res.json())
     .then(data=>{
-      console.log(data);
-      navigate("/admin/allLessons")
+      navigate("/admin/allLessons");
+      toast.success("New Lesson added");
     })
   };
 

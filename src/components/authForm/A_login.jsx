@@ -1,6 +1,7 @@
 import React, { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../provider/AuthProvider";
+import { toast } from "react-toastify";
 
 const A_login = () => {
   const [email, setEmail] = useState("");
@@ -40,19 +41,17 @@ const A_login = () => {
       let email = form.email.value;
       let password = form.password.value;
 
-      console.log(email, password);
-
       signInUser(email, password)
         .then((currentUser) => {
-          console.log(currentUser.user);
           setAdmin(currentUser.user);
           navigate(location?.state ? location.state : "/admin");
+          toast.success("Admin login successful");
         })
         .catch((error) => {
-          alert(error);
+          toast.error(error);
         });
 
-      console.log("Admin login successful");
+
     }
   };
 

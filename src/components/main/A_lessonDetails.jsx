@@ -6,7 +6,6 @@ import { AuthContext } from "../provider/AuthProvider";
 
 const A_lessonDetails = () => {
   let { user } = useContext(AuthContext);
-  console.log(user.email);
 
   // Safely load data from useLoaderData()
   let lesson = useLoaderData() || {}; // Default to an empty object if undefined

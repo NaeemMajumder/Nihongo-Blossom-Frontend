@@ -6,10 +6,10 @@ import Confetti from "react-confetti";
 import { CiPlay1 } from "react-icons/ci";
 import "../../styles/adminLoginBtn.css";
 import { AuthContext } from "../provider/AuthProvider";
+import { toast } from "react-toastify";
 
 const UserLessonDetails = () => {
   let { user } = useContext(AuthContext);
-  console.log(user.email);
 
 
   let email = user.email || 'bughunter7000@gmail.com';
@@ -69,14 +69,13 @@ const UserLessonDetails = () => {
   
       if (response.ok) {
         // Handle success response if needed
-        console.log(data);
       } else {
         // Handle error response
-        alert(data.message); // Show the message sent from backend (e.g., "You have already completed this lesson.")
+        toast.error(data.message); // Show the message sent from backend (e.g., "You have already completed this lesson.")
       }
     } catch (error) {
       console.error("Error:", error); // Log error for debugging
-      alert("Something went wrong. Please try again.");
+      toast.error("Something went wrong. Please try again.");
     }
   
     setTimeout(() => {

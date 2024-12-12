@@ -8,7 +8,6 @@ const A_allUsers = () => {
   const [selectedUserId, setSelectedUserId] = useState(null); // Store the selected user ID for confirmation
   const [action, setAction] = useState(""); // Action type: promote or demote
 
-  console.log(allUsers);
 
   const handlePromote = (id) => {
     setAction("promote");
@@ -34,7 +33,6 @@ const A_allUsers = () => {
     })
       .then((res) => res.json())
       .then((updatedUser) => {
-        console.log(updatedUser);
         // Update the state with the updated user data
         setAllUsers((prevUsers) =>
           prevUsers.map((user) =>
@@ -44,7 +42,6 @@ const A_allUsers = () => {
         setShowModal(false); // Close the modal after the action is performed
       })
       .catch((error) => {
-        console.log(error);
         setShowModal(false); // Close the modal on error
       });
   };

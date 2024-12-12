@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link, useLoaderData, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const A_allLessons = () => {
 
@@ -53,7 +54,7 @@ const A_allLessons = () => {
     setIsModalOpen(true);
   };
 
-  // Confirm delete and show alert
+  // Confirm delete and show 
   const confirmDelete = async() => {
     setIsModalOpen(false);
 
@@ -63,14 +64,14 @@ const A_allLessons = () => {
       });
   
       if (response.ok) {
-        alert("Lesson is deleted");
         navigate("/admin/allLessons");
+        toast.success("Lesson is deleted");
       } else {
-        alert("Failed to delete lesson");
+        toast.error("Failed to delete lesson");
       }
     } catch (error) {
       console.error("Error deleting lesson:", error);
-      alert("An error occurred. Please try again.");
+      toast.error("An error occurred. Please try again.");
     }
   };
 

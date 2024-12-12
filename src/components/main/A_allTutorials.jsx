@@ -2,11 +2,11 @@ import React, { useState } from "react";
 import { Link, useLoaderData, useNavigate } from "react-router-dom"; // For navigation
 import { FaArrowLeft } from "react-icons/fa";
 import { FaEdit, FaTrash } from "react-icons/fa"; // For edit and delete icons
+import { toast } from "react-toastify";
 
 const A_allTutorials = () => {
   let navigate = useNavigate();
   let allTutorials = useLoaderData();
-  console.log(allTutorials);
 
   // State to manage the current page
   const [currentPage, setCurrentPage] = useState(1);
@@ -18,7 +18,6 @@ const A_allTutorials = () => {
 
   // Handle edit tutorial
   const handleEdit = (id) => {
-    console.log(`Editing tutorial with id: ${id}`);
     // Add your edit logic here (e.g., navigate to edit page)
   };
 
@@ -39,13 +38,14 @@ const A_allTutorials = () => {
   
       if (response.ok) {
         navigate("/admin/allTutorials"); // Redirect after successful deletion
+        toast.success("Tutorial Deleted")
       } else {
         const errorData = await response.json();
-        alert(`Failed to delete tutorial: ${errorData.message || "Unknown error"}`);
+        toast.error(`Failed to delete tutorial: ${errorData.message || "Unknown error"}`);
       }
     } catch (error) {
       console.error("Error deleting tutorial:", error);
-      alert("An error occurred while deleting the tutorial. Please try again.");
+      toast.error("An error occurred while deleting the tutorial. Please try again.");
     }
   };
   

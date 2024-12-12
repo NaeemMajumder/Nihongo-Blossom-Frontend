@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { useLoaderData, useNavigate, useParams } from "react-router-dom";
 import { FaArrowLeft } from "react-icons/fa";
+import { toast } from "react-toastify";
 
 const A_editTutorial = () => {
   let tutorialData = useLoaderData();
-  console.log(tutorialData);
   const navigate = useNavigate();
 
 
@@ -47,7 +47,6 @@ const handleInputChange = (e) => {
   // Handle form submit
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(tutorial);
 
 
     fetch(`http://localhost:8080/admin/allTutorials/${tutorialData._id}`, {
@@ -59,13 +58,12 @@ const handleInputChange = (e) => {
       })
         .then((res) => res.json())
         .then((data) => {
-          console.log(data);
           navigate("/admin/allTutorials");
-          alert("Lesson updated successfully!");
+          toast.success("Tutorial updated successfully!");
         })
         .catch((error) => {
           console.error("Error updating lesson:", error);
-          alert("Failed to update the lesson. Please try again.");
+          toast.error("Failed to update the lesson. Please try again.");
         });
   };
 

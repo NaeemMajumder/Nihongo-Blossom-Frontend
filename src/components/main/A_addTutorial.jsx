@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom"; // For navigation
 import { FaArrowLeft } from "react-icons/fa";
+import { toast } from "react-toastify";
 
 const A_addTutorial = () => {
   let navigate = useNavigate();
@@ -17,9 +18,7 @@ const A_addTutorial = () => {
 
     if (match && match[1]) {
       // Only store the src URL (video URL)
-      console.log("Tutorial Created:", { videoURL: match[1], videoTitle });
       let newTutorial = { videoURL: match[1], videoTitle };
-      console.log(newTutorial);
 
       // Send the data to the backend (API request)
       fetch("http://localhost:8080/admin/allTutorials", {
@@ -31,11 +30,11 @@ const A_addTutorial = () => {
       })
         .then((res) => res.json())
         .then((data) => {
-          console.log(data);
-          navigate("/admin/allTutorials"); // Redirect after success
+          navigate("/admin/allTutorials");
+          toast.success("Tutorial successfully added") // Redirect after success
         });
     } else {
-      alert("Invalid iframe embed code. Please provide a valid YouTube iframe embed code.");
+      toast.error("Invalid iframe embed code. Please provide a valid YouTube iframe embed code.");
     }
   };
 

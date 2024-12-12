@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useLoaderData, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const A_editVocabulary = ({ onSave }) => {
   const vocabulary = useLoaderData();
@@ -15,7 +16,6 @@ const A_editVocabulary = ({ onSave }) => {
   const handleSave = (e) => {
     e.preventDefault();
     const updatedVocabulary = { word, meaning, pronunciation, whenToSay, lessonNo };
-    console.log(updatedVocabulary);
 
     fetch(`http://localhost:8080/admin/allVocabularies/${vocabulary._id}`, {
         method: "PUT",
@@ -26,9 +26,8 @@ const A_editVocabulary = ({ onSave }) => {
       })
         .then((res) => res.json())
         .then((data) => {
-          console.log(data);
           navigate("/admin/allVocabularies");
-          alert("Element Update Successfully!");
+          toast.success("Vocabulary Update Successfully!");
         });
     };
 

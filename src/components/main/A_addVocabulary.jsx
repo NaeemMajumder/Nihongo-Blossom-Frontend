@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const A_addVocabulary = () => {
   let navigate = useNavigate();
@@ -15,9 +16,8 @@ const A_addVocabulary = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Vocabulary Created:", { word, meaning, pronunciation, whenToSay, lessonNo });
     let newVocabulary = { word, meaning, pronunciation, whenToSay, lessonNo };
-    console.log(newVocabulary);
+
 
     fetch("http://localhost:8080/admin/allVocabularies",{
       method:"POST",
@@ -33,12 +33,12 @@ const A_addVocabulary = () => {
       return res.json();
     })
     .then(data => {
-      console.log(data);
       navigate("/admin/allVocabularies")
+      toast.success("Vocabulary add successfully")
     })
     .catch(error => {
       console.error("Error:", error.message);
-      alert(`Error: ${error.message}`);
+      toast.error(`Error: ${error.message}`);
     });
   };
 

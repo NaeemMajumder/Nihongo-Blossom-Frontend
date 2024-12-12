@@ -24,13 +24,18 @@ import A_editTutorial from "../main/A_editTutorial.jsx";
 import PrivateRoute from "../provider/PrivateRoute.jsx";
 
 import RouteAccess from "../provider/RouteAccess.jsx";
+import MYProfile from "../header/MyProfile.jsx";
 
 export const router = createBrowserRouter([
   {
     path: "/",
-    element: <App />,
+    element: <PrivateRoute><App /></PrivateRoute>,
     errorElement: <Error />,
     children: [
+      {
+        path: "myProfile",
+        element: <PrivateRoute><MYProfile /></PrivateRoute>,
+      },
       {
         path: "/lessons",
         element:<PrivateRoute><UserAllLessons /></PrivateRoute>,
@@ -42,17 +47,6 @@ export const router = createBrowserRouter([
         loader: ({ params }) =>
           fetch(`http://localhost:8080/lessons/${params.id}`),
       },
-      // {
-      //   path: "/tutorials",
-      //   element: (
-      //     <PrivateRoute>
-      //       <RouteAccess>
-      //         <UserAllTutorials />
-      //       </RouteAccess>
-      //     </PrivateRoute>
-      //   ),
-      //   loader: () => fetch(`http://localhost:8080/admin/allTutorials`),
-      // },
       {
         path: "/tutorials",
         element: <PrivateRoute><UserAllTutorials /></PrivateRoute>,

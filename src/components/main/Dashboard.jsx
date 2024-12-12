@@ -4,7 +4,6 @@ import { Link, useLoaderData } from "react-router-dom";
 const Dashboard = () => {
   let { vocabularies, lessons, users } = useLoaderData();
 
-  console.log({ vocabularies, lessons, users })
 
   const lessonCount = vocabularies.length; 
   const vocabularyCount = lessons.length; 

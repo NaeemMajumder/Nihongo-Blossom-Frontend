@@ -3,6 +3,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom"; // For naviga
 import { FcGoogle } from "react-icons/fc";
 import "../../styles/adminLoginBtn.css";
 import { AuthContext } from "../provider/AuthProvider";
+import { toast } from "react-toastify";
 
 const UserLogin = () => {
   let { setUser, signInUser, registerWithGoogle } = useContext(AuthContext);
@@ -50,7 +51,7 @@ const UserLogin = () => {
 
     // Check if the entered email is "admin@gmail.com"
     if (email === "admin@gmail.com") {
-      alert("This is only for user login. Please go to the admin login form.");
+      toast.info("This is only for user login. Please go to the admin login form.");
       return; // Prevent form submission
     }
 
@@ -59,34 +60,69 @@ const UserLogin = () => {
       let email = form.email.value;
       let password = form.password.value;
 
-      console.log(email, password);
-
       signInUser(email, password)
         .then((currentUser) => {
-          console.log(currentUser.user);
           if (currentUser.user.emailVerified) {
             setUser(currentUser.user)
-            navigate(location?.state ? location.state : "/lessons");
+            navigate("/lessons");
+            toast.success("successfully login")
           }else{
-            alert("please verify your email address");
+            toast.error("please verify your email address");
           }
         })
         .catch((error) => {
-          alert(error);
+          console.error("Sign-in error:", error.code, error.message);
+        
+          switch (error.code) {
+            case "auth/invalid-email":
+              toast.error("Invalid email address.");
+              break;
+            case "auth/user-not-found":
+              toast.error("User not found. Please register first.");
+              break;
+            case "auth/wrong-password":
+              toast.error("Incorrect password.");
+              break;
+            case "auth/too-many-requests":
+              toast.error("Too many failed attempts. Try again later.");
+              break;
+            default:
+              toast.error("Login failed. Please try again.");
+          }
         });
+        
 
-      console.log("Form submitted");
     }
   };
 
   const handleGoogleRegistration = () => {
     registerWithGoogle()
       .then((result) => {
-        console.log(result.user);
-        navigate("/lessons");
+        const { displayName, email, photoURL } = result.user;
+        const userData = { name: displayName, email, PhotoUrl: photoURL };
+  
+        fetch("http://localhost:8080/admin/allUsers/google", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(userData),
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            if (data.message === "User already exists") {
+              console.log("Existing user:", data.user);
+            } else {
+              console.log("New user registered:", data.user);
+            }
+            setUser(result.user);
+            navigate("/lessons");
+            toast.success("Successfully logged in!");
+          })
+          .catch((error) => toast.error("Error during login"));
       })
-      .catch((error) => alert(error.message));
+      .catch((error) => toast.error(error.message));
   };
+  
+  
 
   // Admin Button Animation (auto jump every 2 seconds)
   useEffect(() => {

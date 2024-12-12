@@ -4,6 +4,7 @@ import { AuthContext } from "../provider/AuthProvider";
 import "../../styles/adminLoginBtn.css";
 import { NavLink } from "react-router-dom";
 import { FaCheckCircle } from "react-icons/fa"; // Importing an icon
+import { toast } from "react-toastify";
 
 const UserAllLessons = () => {
   let allLessons = useLoaderData();
@@ -35,7 +36,7 @@ const UserAllLessons = () => {
             setShowCongratulatoryModal(true); // Show modal if user is admin
           }
         } catch (error) {
-          alert(error);
+          toast.error(error);
           setCurrentUserData(null);
         }
       };
@@ -43,7 +44,6 @@ const UserAllLessons = () => {
     }
   }, [email]);
 
-  console.log(currentUserData);
 
   // Items per page (pagination)
   const itemsPerPage = 9;

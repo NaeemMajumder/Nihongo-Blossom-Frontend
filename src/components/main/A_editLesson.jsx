@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useLoaderData, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const A_editLesson = () => {
   const lessonDataFromLoader = useLoaderData();
-  console.log(lessonDataFromLoader)
   const navigate = useNavigate();
 
   const [lessonData, setLessonData] = useState({
@@ -33,7 +33,6 @@ const A_editLesson = () => {
   // Handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Updated Lesson Data:", lessonData);
 
     fetch(`http://localhost:8080/admin/allLessons/${lessonDataFromLoader._id}`, {
       method: "PUT",
@@ -44,13 +43,12 @@ const A_editLesson = () => {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
         navigate("/admin/allLessons");
-        alert("Lesson updated successfully!");
+        toast.success("Lesson updated successfully!");
       })
       .catch((error) => {
         console.error("Error updating lesson:", error);
-        alert("Failed to update the lesson. Please try again.");
+        toast.error("Failed to update the lesson. Please try again.");
       });
   };
 

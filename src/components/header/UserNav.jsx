@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
-import { Navigate, NavLink, useNavigate } from "react-router-dom";
+import { Link, Navigate, NavLink, useNavigate } from "react-router-dom";
 import { AuthContext } from "../provider/AuthProvider";
+import { toast } from "react-toastify";
 
 const UserNav = () => {
 
@@ -10,8 +11,8 @@ const UserNav = () => {
   let handleLogOut = ()=>{
     logOutUser().then(()=>{
       navigate("/login")
-      alert("You are Logged Out")
-    }).catch((error)=>alert(error.message));
+      toast.success("You are Logged Out")
+    }).catch((error)=>toast.error(error.message));
   }
 
   return (
@@ -86,9 +87,12 @@ const UserNav = () => {
                   <span className="text-lg font-bold">{user?.displayName}</span>
                   <span className="text-info">{user?.email}</span>
                   <div className="card-actions flex flex-col space-y-2">
+                    <Link className="w-full" to='/myProfile'>
                     <button className="w-full py-2 px-6 text-white font-semibold text-lg rounded-lg bg-[#3AB092] hover:scale-105 transform transition-all duration-300">
                       Your Profile
-                    </button>
+                    </button>                    
+                    </Link>
+
                     <button onClick={handleLogOut} className="w-full py-2 px-6 text-white font-semibold text-lg rounded-lg bg-gradient-to-br from-[#164193] to-[#00a9ff] hover:scale-105 transform transition-all duration-300 lg:hidden">
                       Log Out
                     </button>

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link, useLoaderData, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const A_allVocabularies = () => {
 
@@ -37,15 +38,15 @@ const A_allVocabularies = () => {
       });
   
       if (response.ok) {
-        alert("Vocabulary is deleted");
+        toast.success("Vocabulary is deleted");
         closeModal();
         navigate("/admin/allVocabularies");
       } else {
-        alert("Failed to delete vocabulary");
+        toast.error("Failed to delete vocabulary");
       }
     } catch (error) {
       console.error("Error deleting vocabulary:", error);
-      alert("An error occurred. Please try again.");
+      toast.error("An error occurred. Please try again.");
     }
   };
   
