@@ -54,7 +54,8 @@ const AuthProvider = ({ children }) => {
     emailVerify,
     loading,
     admin,
-    setAdmin
+    setAdmin,
+    setLoading
   };
 
   useEffect(() => {

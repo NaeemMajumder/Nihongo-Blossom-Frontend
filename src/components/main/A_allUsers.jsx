@@ -1,6 +1,11 @@
 import React from "react";
+import { useLoaderData } from "react-router-dom";
 
 const A_allUsers = () => {
+  
+  let allUsers = useLoaderData();
+  console.log(allUsers);
+
   // Sample user data (replace with dynamic data later)
   const users = [
     { id: 1, name: "John Doe", email: "john@example.com", role: "NormalUser" },
@@ -32,7 +37,7 @@ const A_allUsers = () => {
           <h2 className="text-xl font-medium text-[#164193]">
             Total Users:{" "}
             <span className="text-[#3EB68D] font-semibold">
-              {users.length}
+              {allUsers.length}
             </span>
           </h2>
         </div>
@@ -49,26 +54,26 @@ const A_allUsers = () => {
               </tr>
             </thead>
             <tbody>
-              {users.map((user) => (
-                <tr key={user.id} className="hover:bg-gray-100">
+              {allUsers.map((user) => (
+                <tr key={user._id} className="hover:bg-gray-100">
                   <td className="p-4">{user.name}</td>
                   <td className="p-4">{user.email}</td>
-                  <td className="p-4">{user.role}</td>
+                  <td className="p-4">{user.role}{user.isAdmin?"Admin":"Normal User"}</td>
                   <td className="p-4">
                     {/* Actions */}
-                    {user.role === "NormalUser" ? (
-                      <button
-                        onClick={() => handlePromote(user.id)}
-                        className="bg-gradient-to-br from-[#3EB68D] to-[#2262A6] text-white px-6 py-2 rounded-lg text-lg font-semibold shadow-md hover:scale-105 transition-transform duration-300"
-                      >
-                        Promote to Admin
-                      </button>
-                    ) : (
+                    {user.isAdmin?(
                       <button
                         onClick={() => handleDemote(user.id)}
                         className="bg-gradient-to-br from-[#164193] to-[#00a9ff] text-white px-6 py-2 rounded-lg text-lg font-semibold shadow-md hover:scale-105 transition-transform duration-300"
                       >
                         Demote to User
+                      </button>
+                    ): (
+                      <button
+                        onClick={() => handlePromote(user._id)}
+                        className="bg-gradient-to-br from-[#3EB68D] to-[#2262A6] text-white px-6 py-2 rounded-lg text-lg font-semibold shadow-md hover:scale-105 transition-transform duration-300"
+                      >
+                        Promote to Admin
                       </button>
                     )}
                   </td>

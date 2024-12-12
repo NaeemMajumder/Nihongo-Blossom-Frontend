@@ -1,15 +1,11 @@
 import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../provider/AuthProvider";
-import { FaEye, FaEyeSlash  } from "react-icons/fa";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const UserRegistration = () => {
-  let {
-    setUser,
-    registerWithEmail,
-    updateUserProfile,
-    emailVerify,
-  } = useContext(AuthContext);
+  let { setUser, registerWithEmail, updateUserProfile, emailVerify } =
+    useContext(AuthContext);
   const navigate = useNavigate();
 
   let [showPass, setShowPass] = useState(false);
@@ -92,6 +88,8 @@ const UserRegistration = () => {
     let photoUrl = form.photoUrl.value;
     let password = form.password.value;
 
+    let newUser = {name, email, photoUrl}
+
     console.log(name, email, photoUrl, password);
 
     registerWithEmail(email, password)
@@ -103,7 +101,19 @@ const UserRegistration = () => {
             emailVerify(result)
               .then(() => {
                 alert("Verification email sent! Please check your inbox.");
-                navigate("/login");
+                console.log(result.user);
+                fetch("http://localhost:8080/admin/allUsers",{
+                  method:"POST",
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify(newUser),
+                })
+                .then(res=>res.json())
+                .then(data=>{
+                  console.log(data);
+                  return navigate("/login");
+                }).catch(error=>alert(error));
               })
               .catch((error) => {
                 alert("Error sending verification email: " + error.message);
@@ -199,7 +209,7 @@ const UserRegistration = () => {
                 Password
               </label>
               <input
-                type={showPass?"text":"password"}
+                type={showPass ? "text" : "password"}
                 id="password"
                 name="password"
                 value={userData.password}
@@ -286,33 +296,41 @@ const UserRegistration = () => {
             </div>
 
             {/* Submit Button */}
-            <div className="mt-4">
-              <button
-                type="submit"
-                className={`w-full text-white p-2 rounded-md font-semibold hover:bg-[#2262A6] transition ${
-                  !passwordValidation.length ||
-                  !passwordValidation.uppercase ||
-                  !passwordValidation.lowercase ||
-                  !passwordValidation.number ||
-                  !passwordValidation.specialChar ||
-                  errors.name ||
-                  errors.email
-                    ? "bg-gray-400 cursor-not-allowed"
-                    : "bg-[#3EB68D]"
-                }`}
-                disabled={
-                  !passwordValidation.length ||
-                  !passwordValidation.uppercase ||
-                  !passwordValidation.lowercase ||
-                  !passwordValidation.number ||
-                  !passwordValidation.specialChar ||
-                  errors.name ||
-                  errors.email
-                }
-              >
-                Register
-              </button>
-            </div>
+            <button
+              type="submit"
+              className={`w-full text-white p-2 rounded-md font-semibold hover:bg-[#2262A6] transition mt-8 ${
+                !passwordValidation.length ||
+                !passwordValidation.uppercase ||
+                !passwordValidation.lowercase ||
+                !passwordValidation.number ||
+                !passwordValidation.specialChar ||
+                errors.name ||
+                errors.email ||
+                userData.password !== userData.confirmPassword ||
+                userData.name === "" ||
+                userData.email === "" ||
+                userData.password === "" ||
+                userData.confirmPassword === ""
+                  ? "bg-gray-400 cursor-not-allowed"
+                  : "bg-[#3EB68D]"
+              }`}
+              disabled={
+                !passwordValidation.length ||
+                !passwordValidation.uppercase ||
+                !passwordValidation.lowercase ||
+                !passwordValidation.number ||
+                !passwordValidation.specialChar ||
+                errors.name ||
+                errors.email ||
+                userData.password !== userData.confirmPassword ||
+                userData.name === "" ||
+                userData.email === "" ||
+                userData.password === "" ||
+                userData.confirmPassword === ""
+              }
+            >
+              Register
+            </button>
 
             {/* Links */}
             <div className="mt-4 text-center">

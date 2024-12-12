@@ -1,37 +1,20 @@
-import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom"; // For navigation
+import React, { useContext, useState } from "react";
+import { Link, useLoaderData, useNavigate } from "react-router-dom"; // For navigation
 import { MdOutlineCelebration } from "react-icons/md";
 import { FaCheck } from "react-icons/fa"; // Import tick icon
 import Confetti from "react-confetti";
 import { CiPlay1 } from "react-icons/ci";
-import './styles/adminLoginBtn.css'
+import "../../styles/adminLoginBtn.css";
+import { AuthContext } from "../provider/AuthProvider";
 
-const Demo = () => {
-  // Sample data for vocabulary (replace with dynamic data later)
-  const vocabularies = [
-    {
-      id: 1,
-      word: "こんにちは",
-      meaning: "Hello",
-      pronunciation: "Konnichiwa",
-      whenToSay: "Use this word to greet someone during the day.",
-    },
-    {
-      id: 2,
-      word: "ありがとう",
-      meaning: "Thank you",
-      pronunciation: "Arigatou",
-      whenToSay: "Use this to express gratitude.",
-    },
-    // More vocabulary data...
-  ];
+const UserLessonDetails = () => {
+  let { user } = useContext(AuthContext);
+  console.log(user.email);
+  
+  // Safely load data from useLoaderData()
+  let lesson = useLoaderData() || {}; // Default to an empty object if undefined
+  let vocabularies = lesson.vocabularies || []; // Default to an empty array if undefined
 
-  // Sample lesson data
-  const lesson = {
-    name: "Basic Greetings",
-    lessonNo: 1,
-    description: "Learn basic Japanese greetings.",
-  };
   const navigate = useNavigate(); // Hook for navigation after confetti
   const [currentIndex, setCurrentIndex] = useState(0);
   const [showConfetti, setShowConfetti] = useState(false); // State for confetti
@@ -39,9 +22,11 @@ const Demo = () => {
 
   // Function to handle text-to-speech
   const playPronunciation = (text) => {
-    const speech = new SpeechSynthesisUtterance(text);
-    speech.lang = "ja-JP"; // Set to Japanese
-    window.speechSynthesis.speak(speech);
+    if (text) {
+      const speech = new SpeechSynthesisUtterance(text);
+      speech.lang = "ja-JP"; // Set to Japanese
+      window.speechSynthesis.speak(speech);
+    }
   };
 
   // Navigate to the next vocabulary
@@ -59,16 +44,45 @@ const Demo = () => {
   };
 
   // Handle completion of the vocabulary list
-  const handleComplete = () => {
+  const handleComplete = async () => {
     setShowConfetti(true); // Show confetti when complete
     setIsComplete(true); // Mark the lesson as complete
+
+    try {
+      const userEmail = user.email; // Replace with actual userId from context/auth state
+      const lessonId = lesson._id; // Get lessonId from the lesson object
+
+      let userInfo = { userEmail, lessonId };
+
+      const response = await fetch("http://localhost:8080/completeLesson", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(userInfo),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        // Handle success response if needed
+        console.log(data);
+      } else {
+        // Handle error response
+        console.error("Error:", data.message);
+      }
+    } catch (error) {
+      console.error("Error:", error); // Log error for debugging
+      alert("Something went wrong. Please try again.");
+    }
+
     setTimeout(() => {
       setShowConfetti(false); // Hide confetti after 3 seconds
       navigate("/lessons");
     }, 3000);
   };
 
-  const currentVocabulary = vocabularies[currentIndex];
+  const currentVocabulary = vocabularies[currentIndex] || {}; // Default to an empty object if undefined
 
   return (
     <div className="bg-[#EDF8FA] min-h-screen p-6 flex items-center justify-center">
@@ -78,7 +92,7 @@ const Demo = () => {
           <Confetti
             width={window.innerWidth}
             height={window.innerHeight}
-            numberOfPieces={300}
+            numberOfPieces={700}
             gravity={0.3}
             colors={["#FF0000", "#FFFF00", "#32CD32", "#FFD700", "#8A2BE2"]}
             recycle={false}
@@ -97,9 +111,13 @@ const Demo = () => {
           {/* Lesson Info */}
           <div className="mt-4">
             <h2 className="text-2xl font-semibold text-[#164193] mb-2">
-              {lesson.name}
+              {lesson.lessonNumber}. {lesson.lessonTitle || "Lesson Title"}{" "}
+              {/* Default if lessonTitle is missing */}
             </h2>
-            <p className="text-[#2262A6] text-lg">{lesson.description}</p>
+            {/* Optional description rendering */}
+            {lesson.description && (
+              <p className="text-lg text-[#2262A6]">{lesson.description}</p>
+            )}
           </div>
         </div>
 
@@ -108,19 +126,47 @@ const Demo = () => {
           className="text-4xl font-bold text-[#3EB68D] cursor-pointer mb-4"
           onClick={() => playPronunciation(currentVocabulary.pronunciation)}
         >
-          {currentVocabulary.word}
+          {currentVocabulary.word || "Vocabulary Word"}{" "}
+          {/* Default if word is missing */}
         </h1>
 
-        {/* Vocabulary Details */}
-        <p className="text-lg text-[#2262A6] mb-2">
-          <strong>Meaning:</strong> {currentVocabulary.meaning}
-        </p>
-        <p className="text-lg text-[#2262A6] mb-2">
-          <strong>Pronunciation:</strong> {currentVocabulary.pronunciation}
-        </p>
-        <p className="text-lg text-[#2262A6] mb-4">
-          <strong>When to Say:</strong> {currentVocabulary.whenToSay}
-        </p>
+        {/* Vocabulary Details Table */}
+        <div className="overflow-x-auto bg-white shadow-lg rounded-lg p-6">
+          <table className="w-full table-auto text-[#164193] text-lg">
+            <tbody>
+              {/* Meaning Row */}
+              <tr className="bg-white">
+                <td className="px-6 py-3 border-b border-[#2262A6] font-semibold">
+                  Meaning
+                </td>
+                <td className="px-6 py-3 border-b border-[#2262A6]">
+                  {currentVocabulary.meaning || "Meaning not available"}
+                </td>
+              </tr>
+
+              {/* Pronunciation Row */}
+              <tr className="bg-[#F9FAFB]">
+                <td className="px-6 py-3 border-b border-[#2262A6] font-semibold">
+                  Pronunciation
+                </td>
+                <td className="px-6 py-3 border-b border-[#2262A6]">
+                  {currentVocabulary.pronunciation ||
+                    "Pronunciation not available"}
+                </td>
+              </tr>
+
+              {/* When to Say Row */}
+              <tr className="bg-white">
+                <td className="px-6 py-3 border-b border-[#2262A6] font-semibold">
+                  When to Say
+                </td>
+                <td className="px-6 py-3 border-b border-[#2262A6]">
+                  {currentVocabulary.whenToSay || "Information not available"}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
 
         {/* Navigation Buttons */}
         <div className="button-container flex justify-between mt-6">
@@ -185,4 +231,4 @@ const Demo = () => {
   );
 };
 
-export default Demo;
+export default UserLessonDetails;

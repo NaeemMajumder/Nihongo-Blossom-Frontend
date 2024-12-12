@@ -1,40 +1,31 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useContext, useEffect, useState } from "react";
+import { Link, useLoaderData } from "react-router-dom";
+import { AuthContext } from "../provider/AuthProvider";
+
 
 const UserAllLessons = () => {
-  // Sample lessons data with 'completed' status (replace with dynamic data later)
-  const lessons = [
-    { id: 1, name: "Basic Greetings", number: 1, vocabCount: 12, completed: true },
-    { id: 2, name: "Common Phrases", number: 2, vocabCount: 8, completed: false },
-    { id: 3, name: "Numbers and Counting", number: 3, vocabCount: 15, completed: true },
-    { id: 4, name: "Everyday Vocabulary", number: 4, vocabCount: 10, completed: false },
-    { id: 5, name: "Time and Dates", number: 5, vocabCount: 6, completed: true },
-    { id: 6, name: "Advanced Japanese Grammar", number: 6, vocabCount: 20, completed: false },
-    { id: 7, name: "Japanese Culture", number: 7, vocabCount: 9, completed: true },
-    { id: 8, name: "Hiragana Mastery", number: 8, vocabCount: 18, completed: false },
-    { id: 9, name: "Katakana Introduction", number: 9, vocabCount: 14, completed: true },
-    { id: 10, name: "Kanji Basics", number: 10, vocabCount: 25, completed: true },
-    { id: 11, name: "Japanese Pronunciation", number: 11, vocabCount: 11, completed: false },
-    { id: 12, name: "Business Japanese", number: 12, vocabCount: 30, completed: true },
-    { id: 13, name: "JLPT N5", number: 13, vocabCount: 50, completed: false },
-  ];
+
+  // Fetch lessons data from the loader
+  let allLessons = useLoaderData();
+  console.log(allLessons);
 
   // State for current page, search query, and filter status
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
   const [filterStatus, setFilterStatus] = useState("all"); // 'all', 'completed', 'incomplete'
 
+
   // Items per page (pagination)
   const itemsPerPage = 9;
 
   // Filter lessons based on search query and filter status
-  const filteredLessons = lessons
+  const filteredLessons = allLessons
     .filter((lesson) =>
-      lesson.name.toLowerCase().includes(searchQuery.toLowerCase())
+      lesson.lessonTitle.toLowerCase().includes(searchQuery.toLowerCase())
     )
     .filter((lesson) => {
-      if (filterStatus === "completed") return lesson.completed;
-      if (filterStatus === "incomplete") return !lesson.completed;
+      if (filterStatus === "completed") return lesson.completedStatus;
+      if (filterStatus === "incomplete") return !lesson.completedStatus;
       return true; // 'all' status, show all lessons
     });
 
@@ -117,33 +108,33 @@ const UserAllLessons = () => {
         </div>
 
         {/* Lesson Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-20">
           {currentLessons.map((lesson) => (
             <div
-              key={lesson.id}
+              key={lesson._id}
               className="bg-white shadow-lg rounded-lg p-6 hover:scale-105 transform transition-transform duration-300"
             >
               <div className="flex justify-between items-center mb-4">
-                <h3 className="text-xl font-semibold text-[#3EB68D]">{lesson.name}</h3>
+                <h3 className="text-xl font-semibold text-[#3EB68D]">{lesson.lessonTitle}</h3>
                 
                 {/* Badge for Completed/Incompleted */}
                 <div
                   className={`text-white px-3 py-1 rounded-full text-sm ${
-                    lesson.completed ? "bg-green-500" : "bg-red-500"
+                    lesson.completedStatus ? "bg-green-500" : "bg-red-500"
                   }`}
                 >
-                  {lesson.completed ? "Complete" : "Incomplete"}
+                  {lesson.completedStatus ? "Complete" : "Incomplete"}
                 </div>
               </div>
 
               <p className="text-[#2262A6] mb-1">
-                <strong>Lesson Number:</strong> {lesson.number}
+                <strong>Lesson Number:</strong> {lesson.lessonNumber}
               </p>
               <p className="text-[#2262A6] mb-1">
-                <strong>Vocabulary Count:</strong> {lesson.vocabCount}
+                <strong>Vocabulary Count:</strong> {lesson.vocabularies.length}
               </p>
 
-              <Link to={`/lesson/${lesson.number}`}>
+              <Link to={`/lessons/${lesson._id}`}>
                 <button className="bg-gradient-to-br from-[#164193] to-[#00a9ff] text-white px-4 py-2 rounded-md shadow-md hover:opacity-90 transition-opacity w-full mt-4">
                   Go to Lesson
                 </button>
@@ -153,7 +144,7 @@ const UserAllLessons = () => {
         </div>
 
         {/* Pagination Controls */}
-        <div className="flex justify-center items-center mt-6 gap-4">
+        <div className="flex justify-center items-center mt-6 gap-4 mb-32">
           {/* Previous Button */}
           <button
             onClick={prevPage}
@@ -167,7 +158,6 @@ const UserAllLessons = () => {
           <span className="text-[#164193] text-lg font-medium">
             Page {currentPage} of {totalPages}
           </span>
-
           {/* Next Button */}
           <button
             onClick={nextPage}

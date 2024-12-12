@@ -24,11 +24,21 @@ const A_addVocabulary = () => {
       },
       body: JSON.stringify(newVocabulary),
     })
-    .then(res=>res.json())
+    .then(res => {
+      if (!res.ok) {
+        // If the response is not OK, throw an error with the status text
+        return res.json().then(errorData => { throw new Error(errorData.message || 'Something went wrong') });
+      }
+      return res.json();
+    })
     .then(data=>{
       console.log(data);
       navigate("/admin/allVocabularies")
-    })
+    })  .catch(error => {
+      console.error("Error:", error.message);
+      // Optionally, you can display an error message in the UI
+      alert(`Error: ${error.message}`);
+    });
   };
 
   return (
