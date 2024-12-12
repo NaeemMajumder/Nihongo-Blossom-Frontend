@@ -110,7 +110,7 @@ const AdminNav = () => {
               </div>
             </div>
 
-            <button className="hidden lg:inline-block py-2 px-6 text-white font-semibold text-lg rounded-lg bg-gradient-to-br from-[#164193] to-[#00a9ff] hover:scale-105 transform transition-all duration-300">
+            <button onClick={handleLogOut} className="hidden lg:inline-block py-2 px-6 text-white font-semibold text-lg rounded-lg bg-gradient-to-br from-[#164193] to-[#00a9ff] hover:scale-105 transform transition-all duration-300">
               Log Out
             </button>
           </div>

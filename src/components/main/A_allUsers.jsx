@@ -1,27 +1,56 @@
-import React from "react";
+import React, { useState } from "react";
 import { useLoaderData } from "react-router-dom";
 
 const A_allUsers = () => {
-  
-  let allUsers = useLoaderData();
+  let initialUsers = useLoaderData();
+  const [allUsers, setAllUsers] = useState(initialUsers); // Store users in state
+  const [showModal, setShowModal] = useState(false); // Modal visibility state
+  const [selectedUserId, setSelectedUserId] = useState(null); // Store the selected user ID for confirmation
+  const [action, setAction] = useState(""); // Action type: promote or demote
+
   console.log(allUsers);
 
-  // Sample user data (replace with dynamic data later)
-  const users = [
-    { id: 1, name: "John Doe", email: "john@example.com", role: "NormalUser" },
-    { id: 2, name: "Jane Smith", email: "jane@example.com", role: "Admin" },
-    { id: 3, name: "Alice Johnson", email: "alice@example.com", role: "NormalUser" },
-    { id: 4, name: "Bob Brown", email: "bob@example.com", role: "NormalUser" },
-  ];
-
   const handlePromote = (id) => {
-    console.log(`Promote user with ID: ${id} to Admin`);
-    // Add the logic to promote the user to Admin
+    setAction("promote");
+    setSelectedUserId(id);
+    setShowModal(true); // Show the modal for confirmation
   };
 
   const handleDemote = (id) => {
-    console.log(`Demote user with ID: ${id} to NormalUser`);
-    // Add the logic to demote the user to NormalUser
+    setAction("demote");
+    setSelectedUserId(id);
+    setShowModal(true); // Show the modal for confirmation
+  };
+
+  const confirmAction = () => {
+    let isAdmin = action === "promote" ? true : false;
+
+    fetch(`http://localhost:8080/admin/allUsers/${selectedUserId}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ isAdmin }),
+    })
+      .then((res) => res.json())
+      .then((updatedUser) => {
+        console.log(updatedUser);
+        // Update the state with the updated user data
+        setAllUsers((prevUsers) =>
+          prevUsers.map((user) =>
+            user._id === selectedUserId ? { ...user, isAdmin } : user
+          )
+        );
+        setShowModal(false); // Close the modal after the action is performed
+      })
+      .catch((error) => {
+        console.log(error);
+        setShowModal(false); // Close the modal on error
+      });
+  };
+
+  const cancelAction = () => {
+    setShowModal(false); // Close the modal if the action is canceled
   };
 
   return (
@@ -46,7 +75,7 @@ const A_allUsers = () => {
         <div className="overflow-x-auto bg-white shadow-md rounded-lg p-4">
           <table className="table-auto w-full">
             <thead>
-              <tr  className="bg-[#164193] text-white">
+              <tr className="bg-[#164193] text-white">
                 <th className="p-4 text-left">User Name</th>
                 <th className="p-4 text-left">Email</th>
                 <th className="p-4 text-left">Role</th>
@@ -58,17 +87,19 @@ const A_allUsers = () => {
                 <tr key={user._id} className="hover:bg-gray-100">
                   <td className="p-4">{user.name}</td>
                   <td className="p-4">{user.email}</td>
-                  <td className="p-4">{user.role}{user.isAdmin?"Admin":"Normal User"}</td>
+                  <td className="p-4">
+                    {user.isAdmin ? "Admin" : "Normal User"}
+                  </td>
                   <td className="p-4">
                     {/* Actions */}
-                    {user.isAdmin?(
+                    {user.isAdmin ? (
                       <button
-                        onClick={() => handleDemote(user.id)}
+                        onClick={() => handleDemote(user._id)}
                         className="bg-gradient-to-br from-[#164193] to-[#00a9ff] text-white px-6 py-2 rounded-lg text-lg font-semibold shadow-md hover:scale-105 transition-transform duration-300"
                       >
                         Demote to User
                       </button>
-                    ): (
+                    ) : (
                       <button
                         onClick={() => handlePromote(user._id)}
                         className="bg-gradient-to-br from-[#3EB68D] to-[#2262A6] text-white px-6 py-2 rounded-lg text-lg font-semibold shadow-md hover:scale-105 transition-transform duration-300"
@@ -83,6 +114,31 @@ const A_allUsers = () => {
           </table>
         </div>
       </div>
+
+      {/* Confirmation Modal */}
+      {showModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+          <div className="bg-white p-6 rounded-lg shadow-lg w-96">
+            <h2 className="text-xl font-semibold text-[#164193] mb-4">
+              Are you sure you want to {action} this user?
+            </h2>
+            <div className="flex justify-between">
+              <button
+                onClick={confirmAction}
+                className="bg-green-500 text-white px-4 py-2 rounded-lg"
+              >
+                Confirm
+              </button>
+              <button
+                onClick={cancelAction}
+                className="bg-red-500 text-white px-4 py-2 rounded-lg"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

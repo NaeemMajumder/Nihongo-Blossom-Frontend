@@ -20,6 +20,10 @@ import A_vocabDetails from "../main/A_vocabDetails.jsx";
 import A_editVocabulary from "../main/A_editVocabulary.jsx";
 import A_lessonDetails from "../main/A_lessonDetails.jsx";
 import A_editLesson from "../main/A_editLesson.jsx";
+import A_editTutorial from "../main/A_editTutorial.jsx";
+import PrivateRoute from "../provider/PrivateRoute.jsx";
+
+import RouteAccess from "../provider/RouteAccess.jsx";
 
 export const router = createBrowserRouter([
   {
@@ -29,18 +33,29 @@ export const router = createBrowserRouter([
     children: [
       {
         path: "/lessons",
-        element: <UserAllLessons />,
+        element:<PrivateRoute><UserAllLessons /></PrivateRoute>,
         loader: () => fetch(`http://localhost:8080/lessons`),
       },
       {
         path: "/lessons/:id",
-        element: <UserLessonDetails />,
+        element: <PrivateRoute><UserLessonDetails /></PrivateRoute>,
         loader: ({ params }) =>
           fetch(`http://localhost:8080/lessons/${params.id}`),
       },
+      // {
+      //   path: "/tutorials",
+      //   element: (
+      //     <PrivateRoute>
+      //       <RouteAccess>
+      //         <UserAllTutorials />
+      //       </RouteAccess>
+      //     </PrivateRoute>
+      //   ),
+      //   loader: () => fetch(`http://localhost:8080/admin/allTutorials`),
+      // },
       {
         path: "/tutorials",
-        element: <UserAllTutorials />,
+        element: <PrivateRoute><UserAllTutorials /></PrivateRoute>,
         loader: () => fetch(`http://localhost:8080/admin/allTutorials`),
       },
     ],
@@ -57,32 +72,48 @@ export const router = createBrowserRouter([
   // admin
   {
     path: "/admin",
-    element: <Admin />,
+    element: <PrivateRoute><RouteAccess><Admin /></RouteAccess></PrivateRoute>,
     children: [
       {
         path: "/admin",
-        element: <Dashboard></Dashboard>,
+        element: <PrivateRoute><RouteAccess><Dashboard></Dashboard></RouteAccess></PrivateRoute>,
+        loader: async () => {
+          // Fetch both vocabularies and lessons concurrently
+          const [vocabulariesResponse, lessonsResponse, usersResponse] =
+            await Promise.all([
+              fetch("http://localhost:8080/admin/allVocabularies"),
+              fetch("http://localhost:8080/admin/allLessons"),
+              fetch("http://localhost:8080/admin/allUsers"),
+            ]);
+          // Wait for responses to be converted to JSON
+          const vocabularies = await vocabulariesResponse.json();
+          const lessons = await lessonsResponse.json();
+          const users = await usersResponse.json();
+
+          // Return the data so it can be accessed by the component
+          return { vocabularies, lessons, users };
+        },
       },
       {
         path: "/admin/allLessons",
-        element: <A_allLessons />,
+        element: <PrivateRoute><RouteAccess><A_allLessons /></RouteAccess></PrivateRoute>,
         loader: () => fetch(`http://localhost:8080/lessons`),
       },
       {
         path: "/admin/allLessons/:id",
-        element: <A_lessonDetails />,
+        element: <PrivateRoute><RouteAccess><A_lessonDetails /></RouteAccess></PrivateRoute>,
         loader: ({ params }) =>
           fetch(`http://localhost:8080/admin/allLessons/${params.id}`),
       },
       {
         path: "/admin/allLessons/edit/:id",
-        element: <A_editLesson />,
+        element: <PrivateRoute><RouteAccess><A_editLesson /></RouteAccess></PrivateRoute>,
         loader: ({ params }) =>
           fetch(`http://localhost:8080/admin/allLessons/edit/${params.id}`),
       },
       {
         path: "/admin/allVocabularies",
-        element: <A_allVocabularies />,
+        element: <PrivateRoute><RouteAccess><A_allVocabularies /></RouteAccess></PrivateRoute>,
         loader: async () => {
           // Fetch both vocabularies and lessons concurrently
           const [vocabulariesResponse, lessonsResponse] = await Promise.all([
@@ -100,37 +131,45 @@ export const router = createBrowserRouter([
       },
       {
         path: "/admin/allVocabularies/:id",
-        element: <A_vocabDetails />,
+        element: <PrivateRoute><RouteAccess><A_vocabDetails /></RouteAccess></PrivateRoute>,
         loader: ({ params }) =>
           fetch(`http://localhost:8080/admin/allVocabularies/${params.id}`),
       },
       {
         path: "/admin/allVocabularies/edit/:id",
-        element: <A_editVocabulary />,
+        element: <PrivateRoute><RouteAccess><A_editVocabulary /></RouteAccess></PrivateRoute>,
         loader: ({ params }) =>
-          fetch(`http://localhost:8080/admin/allVocabularies/edit/${params.id}`),
+          fetch(
+            `http://localhost:8080/admin/allVocabularies/edit/${params.id}`
+          ),
       },
       {
         path: "/admin/allTutorials",
-        element: <A_allTutorials />,
+        element: <PrivateRoute><RouteAccess><A_allTutorials /></RouteAccess></PrivateRoute>,
         loader: () => fetch(`http://localhost:8080/admin/allTutorials`),
       },
       {
+        path: "/admin/allTutorials/edit/:id",
+        element: <PrivateRoute><RouteAccess><A_editTutorial /></RouteAccess></PrivateRoute>,
+        loader: ({ params }) =>
+          fetch(`http://localhost:8080/admin/allTutorials/edit/${params.id}`),
+      },
+      {
         path: "/admin/allUsers",
-        element: <A_allUsers />,
+        element: <PrivateRoute><RouteAccess><A_allUsers /></RouteAccess></PrivateRoute>,
         loader: () => fetch(`http://localhost:8080/admin/allUsers`),
       },
       {
         path: "/admin/addLessons",
-        element: <A_addLessons />,
+        element: <PrivateRoute><RouteAccess><A_addLessons /></RouteAccess></PrivateRoute>,
       },
       {
         path: "/admin/addVocabulary",
-        element: <A_addVocabulary />,
+        element: <PrivateRoute><RouteAccess><A_addVocabulary /></RouteAccess></PrivateRoute>,
       },
       {
         path: "/admin/addTutorial",
-        element: <A_addTutorial />,
+        element: <PrivateRoute><RouteAccess><A_addTutorial /></RouteAccess></PrivateRoute>,
       },
     ],
   },

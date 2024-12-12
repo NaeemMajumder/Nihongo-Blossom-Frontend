@@ -1,15 +1,20 @@
 import React, { useState } from "react";
-import { Link, useLoaderData } from "react-router-dom"; // For navigation
+import { Link, useLoaderData, useNavigate } from "react-router-dom"; // For navigation
 import { FaArrowLeft } from "react-icons/fa";
 import { FaEdit, FaTrash } from "react-icons/fa"; // For edit and delete icons
 
 const A_allTutorials = () => {
+  let navigate = useNavigate();
   let allTutorials = useLoaderData();
   console.log(allTutorials);
 
   // State to manage the current page
   const [currentPage, setCurrentPage] = useState(1);
   const videosPerPage = 6;
+
+  // State to manage delete confirmation modal
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [tutorialToDelete, setTutorialToDelete] = useState(null);
 
   // Handle edit tutorial
   const handleEdit = (id) => {
@@ -19,14 +24,35 @@ const A_allTutorials = () => {
 
   // Handle delete tutorial
   const handleDelete = (id) => {
-    console.log(`Deleting tutorial with id: ${id}`);
-    // Add your delete logic here (e.g., API call to delete tutorial)
+    setTutorialToDelete(id); // Set the tutorial id to be deleted
+    setIsModalOpen(true); // Open the modal
   };
 
-  // Handle add new tutorial
-  const handleAddTutorial = () => {
-    console.log("Adding a new tutorial");
-    // Add your add tutorial logic here (e.g., navigate to add tutorial page)
+  // Confirm delete
+  const confirmDelete = async () => {
+    setIsModalOpen(false); // Close the modal immediately
+  
+    try {
+      const response = await fetch(`http://localhost:8080/admin/allTutorials/${tutorialToDelete}`, {
+        method: "DELETE",
+      });
+  
+      if (response.ok) {
+        navigate("/admin/allTutorials"); // Redirect after successful deletion
+      } else {
+        const errorData = await response.json();
+        alert(`Failed to delete tutorial: ${errorData.message || "Unknown error"}`);
+      }
+    } catch (error) {
+      console.error("Error deleting tutorial:", error);
+      alert("An error occurred while deleting the tutorial. Please try again.");
+    }
+  };
+  
+
+  // Cancel delete
+  const cancelDelete = () => {
+    setIsModalOpen(false); // Close the modal without deleting
   };
 
   // Calculate the index of the first and last tutorial on the current page
@@ -46,7 +72,6 @@ const A_allTutorials = () => {
 
   return (
     <div className="bg-[#EDF8FA] min-h-screen p-6 flex flex-col items-center">
-
       {/* Title */}
       <h1 className="text-3xl font-bold text-[#3EB68D] mb-6">
         Japanese Language Learning Tutorials
@@ -100,17 +125,20 @@ const A_allTutorials = () => {
               </div>
               <div className="flex gap-3">
                 {/* Edit Button */}
-                <button
-                  title="edit tutorial"
-                  onClick={() => handleEdit(index)}
-                  className="text-[#3EB68D] hover:text-[#164193] transition-colors"
-                >
-                  <FaEdit size={20} />
-                </button>
+                <Link to={`/admin/allTutorials/edit/${video._id}`}>
+                  <button
+                    title="edit tutorial"
+                    onClick={() => handleEdit(index)}
+                    className="text-[#3EB68D] hover:text-[#164193] transition-colors"
+                  >
+                    <FaEdit size={20} />
+                  </button>
+                </Link>
+
                 {/* Delete Button */}
                 <button
                   title="Delete tutorial"
-                  onClick={() => handleDelete(index)}
+                  onClick={() => handleDelete(video._id)}
                   className="text-red-500 hover:text-[#164193] transition-colors"
                 >
                   <FaTrash size={20} />
@@ -156,6 +184,31 @@ const A_allTutorials = () => {
           <FaArrowLeft className="transform rotate-180" />
         </button>
       </div>
+
+      {/* Delete Confirmation Modal */}
+      {isModalOpen && (
+        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center z-50">
+          <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-sm">
+            <h2 className="text-xl text-[#164193] font-semibold mb-4">
+              Are you sure you want to delete this tutorial?
+            </h2>
+            <div className="flex justify-between gap-4">
+              <button
+                onClick={confirmDelete}
+                className="bg-red-500 text-white px-6 py-2 rounded-lg text-lg font-semibold shadow-md hover:scale-105 transition-transform duration-300"
+              >
+                Yes, Delete
+              </button>
+              <button
+                onClick={cancelDelete}
+                className="bg-gray-500 text-white px-6 py-2 rounded-lg text-lg font-semibold shadow-md hover:scale-105 transition-transform duration-300"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

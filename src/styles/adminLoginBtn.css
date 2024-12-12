@@ -70,4 +70,9 @@
       width: 100% !important; /* Make buttons take full width on small screens */
     }
   }
+@media (max-width: 400px) {
+    .filters-button{
+        flex-direction: column;
+    }
+  }
   

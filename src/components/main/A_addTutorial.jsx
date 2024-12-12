@@ -3,7 +3,6 @@ import { Link, useNavigate } from "react-router-dom"; // For navigation
 import { FaArrowLeft } from "react-icons/fa";
 
 const A_addTutorial = () => {
-
   let navigate = useNavigate();
 
   const [videoEmbedCode, setVideoEmbedCode] = useState("");
@@ -17,27 +16,27 @@ const A_addTutorial = () => {
     const match = videoEmbedCode.match(regex);
 
     if (match && match[1]) {
+      // Only store the src URL (video URL)
       console.log("Tutorial Created:", { videoURL: match[1], videoTitle });
       let newTutorial = { videoURL: match[1], videoTitle };
-      console.log(newTutorial)
+      console.log(newTutorial);
 
-      fetch("http://localhost:8080/admin/allTutorials",{
-        method:"POST",
+      // Send the data to the backend (API request)
+      fetch("http://localhost:8080/admin/allTutorials", {
+        method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(newTutorial),
       })
-      .then(res=>res.json())
-      .then(data=>{
-        console.log(data);
-        navigate("/admin/allTutorials")
-      })
+        .then((res) => res.json())
+        .then((data) => {
+          console.log(data);
+          navigate("/admin/allTutorials"); // Redirect after success
+        });
     } else {
-      alert("Invalid iframe embed code");
+      alert("Invalid iframe embed code. Please provide a valid YouTube iframe embed code.");
     }
-
-    // Add logic to handle tutorial creation, like making an API request
   };
 
   return (
@@ -45,7 +44,10 @@ const A_addTutorial = () => {
       <div className="w-full max-w-xl bg-white p-8 rounded-lg shadow-xl">
         {/* Back Button */}
         <div className="mb-6">
-          <Link to="/admin/allTutorials" className="text-[#164193] font-semibold text-md flex items-center gap-2 hover:opacity-90 transition-opacity">
+          <Link
+            to="/admin/allTutorials"
+            className="text-[#164193] font-semibold text-md flex items-center gap-2 hover:opacity-90 transition-opacity"
+          >
             <FaArrowLeft /> Back to All Tutorials
           </Link>
         </div>
@@ -60,7 +62,9 @@ const A_addTutorial = () => {
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Video Embed Code */}
           <div>
-            <label className="block text-[#164193] text-lg font-medium mb-2">YouTube Iframe Embed Code (full Link)</label>
+            <label className="block text-[#164193] text-lg font-medium mb-2">
+              YouTube Iframe Embed Code (full Link)
+            </label>
             <input
               type="text"
               value={videoEmbedCode}

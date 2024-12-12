@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const A_addVocabulary = () => {
-
   let navigate = useNavigate();
 
   const [word, setWord] = useState("");
@@ -10,6 +9,9 @@ const A_addVocabulary = () => {
   const [pronunciation, setPronunciation] = useState("");
   const [whenToSay, setWhenToSay] = useState("");
   const [lessonNo, setLessonNo] = useState("");
+  
+  // Add this state for admin email (though it's not used)
+  const [adminEmail, setAdminEmail] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -26,17 +28,16 @@ const A_addVocabulary = () => {
     })
     .then(res => {
       if (!res.ok) {
-        // If the response is not OK, throw an error with the status text
         return res.json().then(errorData => { throw new Error(errorData.message || 'Something went wrong') });
       }
       return res.json();
     })
-    .then(data=>{
+    .then(data => {
       console.log(data);
       navigate("/admin/allVocabularies")
-    })  .catch(error => {
+    })
+    .catch(error => {
       console.error("Error:", error.message);
-      // Optionally, you can display an error message in the UI
       alert(`Error: ${error.message}`);
     });
   };
@@ -44,13 +45,11 @@ const A_addVocabulary = () => {
   return (
     <div className="bg-[#EDF8FA] p-6 min-h-screen flex justify-center items-center">
       <div className="w-full max-w-xl bg-white p-8 rounded-lg shadow-xl">
-        {/* Header Section */}
         <div className="mb-6 text-center">
           <h1 className="text-3xl font-semibold text-[#164193]">Add New Vocabulary</h1>
           <p className="mt-2 text-lg text-[#2262A6]">Add details for a new vocabulary word</p>
         </div>
 
-        {/* Add Vocabulary Form */}
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Word */}
           <div>
@@ -124,6 +123,20 @@ const A_addVocabulary = () => {
               className="w-full p-4 border-2 border-[#2262A6] rounded-lg text-[#164193] focus:outline-none focus:border-[#3EB68D] focus:ring-2 focus:ring-[#3EB68D] shadow-md"
               placeholder="Enter lesson number"
               required
+            />
+          </div>
+
+          {/* Admin Email - New Field */}
+          <div>
+            <label className="block text-[#164193] text-lg font-medium mb-2">
+              Admin Email
+            </label>
+            <input
+              type="email"
+              value={adminEmail}
+              onChange={(e) => setAdminEmail(e.target.value)}
+              className="w-full p-4 border-2 border-[#2262A6] rounded-lg text-[#164193] focus:outline-none focus:border-[#3EB68D] focus:ring-2 focus:ring-[#3EB68D] shadow-md"
+              placeholder="Enter admin email"
             />
           </div>
 

@@ -10,6 +10,9 @@ import { AuthContext } from "../provider/AuthProvider";
 const UserLessonDetails = () => {
   let { user } = useContext(AuthContext);
   console.log(user.email);
+
+
+  let email = user.email || 'bughunter7000@gmail.com';
   
   // Safely load data from useLoaderData()
   let lesson = useLoaderData() || {}; // Default to an empty object if undefined
@@ -47,13 +50,13 @@ const UserLessonDetails = () => {
   const handleComplete = async () => {
     setShowConfetti(true); // Show confetti when complete
     setIsComplete(true); // Mark the lesson as complete
-
+  
     try {
       const userEmail = user.email; // Replace with actual userId from context/auth state
       const lessonId = lesson._id; // Get lessonId from the lesson object
-
+  
       let userInfo = { userEmail, lessonId };
-
+  
       const response = await fetch("http://localhost:8080/completeLesson", {
         method: "POST",
         headers: {
@@ -61,26 +64,27 @@ const UserLessonDetails = () => {
         },
         body: JSON.stringify(userInfo),
       });
-
+  
       const data = await response.json();
-
+  
       if (response.ok) {
         // Handle success response if needed
         console.log(data);
       } else {
         // Handle error response
-        console.error("Error:", data.message);
+        alert(data.message); // Show the message sent from backend (e.g., "You have already completed this lesson.")
       }
     } catch (error) {
       console.error("Error:", error); // Log error for debugging
       alert("Something went wrong. Please try again.");
     }
-
+  
     setTimeout(() => {
       setShowConfetti(false); // Hide confetti after 3 seconds
       navigate("/lessons");
     }, 3000);
   };
+  
 
   const currentVocabulary = vocabularies[currentIndex] || {}; // Default to an empty object if undefined
 

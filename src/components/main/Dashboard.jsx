@@ -1,11 +1,14 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useLoaderData } from "react-router-dom";
 
 const Dashboard = () => {
-  // Fixed data (replace these with dynamic data later)
-  const lessonCount = 10; // Example fixed count
-  const vocabularyCount = 50; // Example fixed count
-  const userCount = 100; // Example fixed count
+  let { vocabularies, lessons, users } = useLoaderData();
+
+  console.log({ vocabularies, lessons, users })
+
+  const lessonCount = vocabularies.length; 
+  const vocabularyCount = lessons.length; 
+  const userCount = users.length; 
 
   return (
     <div className="min-h-screen bg-[#EDF8FA] flex flex-col items-center py-10">

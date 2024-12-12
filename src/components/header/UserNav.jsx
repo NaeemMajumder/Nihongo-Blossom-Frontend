@@ -52,7 +52,7 @@ const UserNav = () => {
                 </li>
               </ul>
             </div>
-            <a href="/" className="btn btn-ghost text-2xl text-[#4CB78B]">
+            <a href="/lessons" className="btn btn-ghost text-2xl text-[#4CB78B]">
               Nihongo Blossom
             </a>
           </div>
@@ -97,7 +97,7 @@ const UserNav = () => {
               </div>
             </div>
 
-            <button className="hidden lg:inline-block py-2 px-6 text-white font-semibold text-lg rounded-lg bg-gradient-to-br from-[#164193] to-[#00a9ff] hover:scale-105 transform transition-all duration-300">
+            <button onClick={handleLogOut} className="hidden lg:inline-block py-2 px-6 text-white font-semibold text-lg rounded-lg bg-gradient-to-br from-[#164193] to-[#00a9ff] hover:scale-105 transform transition-all duration-300">
               Log Out
             </button>
           </div>

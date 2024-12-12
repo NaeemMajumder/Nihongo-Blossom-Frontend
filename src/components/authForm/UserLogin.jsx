@@ -83,7 +83,7 @@ const UserLogin = () => {
     registerWithGoogle()
       .then((result) => {
         console.log(result.user);
-        // navigate(location?.state ? location.state : "/");
+        navigate("/lessons");
       })
       .catch((error) => alert(error.message));
   };

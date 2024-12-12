@@ -55,10 +55,7 @@ const A_allLessons = () => {
 
   // Confirm delete and show alert
   const confirmDelete = async() => {
-    // Logic for deleting the lesson (make sure to call an API to delete from the backend)
     setIsModalOpen(false);
-    // Here you would call an API to delete the lesson, e.g.:
-    // fetch(`/api/lessons/${lessonToDelete}`, { method: "DELETE" })
 
     try {
       const response = await fetch(`http://localhost:8080/admin/allLessons/${lessonToDelete}`, {
