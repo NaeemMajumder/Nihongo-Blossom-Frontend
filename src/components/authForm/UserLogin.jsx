@@ -101,7 +101,7 @@ const UserLogin = () => {
         const { displayName, email, photoURL } = result.user;
         const userData = { name: displayName, email, PhotoUrl: photoURL };
   
-        fetch("http://localhost:8080/admin/allUsers/google", {
+        fetch("https://programminghero-job-ta-backend.vercel.app/admin/allUsers/google", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(userData),
@@ -109,9 +109,9 @@ const UserLogin = () => {
           .then((res) => res.json())
           .then((data) => {
             if (data.message === "User already exists") {
-              console.log("Existing user:", data.user);
+              console.log("Exist");
             } else {
-              console.log("New user registered:", data.user);
+              console.log("new");
             }
             setUser(result.user);
             navigate("/lessons");

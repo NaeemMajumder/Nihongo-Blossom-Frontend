@@ -34,7 +34,7 @@ const A_editLesson = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    fetch(`http://localhost:8080/admin/allLessons/${lessonDataFromLoader._id}`, {
+    fetch(`https://programminghero-job-ta-backend.vercel.app/admin/allLessons/${lessonDataFromLoader._id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",

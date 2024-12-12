@@ -10,8 +10,6 @@ const MYProfile = () => {
   const handleProfileSubmit = (e) => {
     e.preventDefault();
 
-    console.log(user);
-
     // Get values from the form
     const formData = new FormData(e.target);
     const updatedName = formData.get("name");

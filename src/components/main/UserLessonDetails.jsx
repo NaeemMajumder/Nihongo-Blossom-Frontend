@@ -57,7 +57,7 @@ const UserLessonDetails = () => {
   
       let userInfo = { userEmail, lessonId };
   
-      const response = await fetch("http://localhost:8080/completeLesson", {
+      const response = await fetch("https://programminghero-job-ta-backend.vercel.app/completeLesson", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

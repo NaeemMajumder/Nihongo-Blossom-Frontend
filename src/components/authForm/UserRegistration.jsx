@@ -101,7 +101,7 @@ const UserRegistration = () => {
       .then((result) => {
         setUser(result.user);
 
-    fetch("http://localhost:8080/admin/allUsers", {
+    fetch("https://programminghero-job-ta-backend.vercel.app/admin/allUsers", {
       method: "POST",
       body: formData, // Send formData indstead of JSON
     })

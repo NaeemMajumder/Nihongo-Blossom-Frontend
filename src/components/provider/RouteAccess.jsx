@@ -16,7 +16,7 @@ const RouteAccess = ({ children }) => {
         if (email) {
             const fetchData = async () => {
                 try {
-                    const response = await fetch(`http://localhost:8080/allUsers/user?email=${email}`);
+                    const response = await fetch(`https://programminghero-job-ta-backend.vercel.app/allUsers/user?email=${email}`);
                     if (!response.ok) {
                         throw new Error("User not found");
                     }

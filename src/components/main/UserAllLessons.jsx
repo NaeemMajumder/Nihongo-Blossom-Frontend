@@ -25,7 +25,7 @@ const UserAllLessons = () => {
       const fetchData = async () => {
         try {
           let response = await fetch(
-            `http://localhost:8080/allUsers/user?email=${email}`
+            `https://programminghero-job-ta-backend.vercel.app/allUsers/user?email=${email}`
           );
           if (!response.ok) {
             throw new Error("User not found");

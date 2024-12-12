@@ -25,6 +25,7 @@ import PrivateRoute from "../provider/PrivateRoute.jsx";
 
 import RouteAccess from "../provider/RouteAccess.jsx";
 import MYProfile from "../header/MyProfile.jsx";
+import HomePage from "../main/HomePage.jsx";
 
 export const router = createBrowserRouter([
   {
@@ -33,24 +34,28 @@ export const router = createBrowserRouter([
     errorElement: <Error />,
     children: [
       {
+        path: "/",
+        element: <PrivateRoute><HomePage /></PrivateRoute>,
+      },
+      {
         path: "myProfile",
         element: <PrivateRoute><MYProfile /></PrivateRoute>,
       },
       {
-        path: "/lessons",
+        path: "lessons",
         element:<PrivateRoute><UserAllLessons /></PrivateRoute>,
-        loader: () => fetch(`http://localhost:8080/lessons`),
+        loader: () => fetch(`https://programminghero-job-ta-backend.vercel.app/lessons`),
       },
       {
         path: "/lessons/:id",
         element: <PrivateRoute><UserLessonDetails /></PrivateRoute>,
         loader: ({ params }) =>
-          fetch(`http://localhost:8080/lessons/${params.id}`),
+          fetch(`https://programminghero-job-ta-backend.vercel.app/lessons/${params.id}`),
       },
       {
         path: "/tutorials",
         element: <PrivateRoute><UserAllTutorials /></PrivateRoute>,
-        loader: () => fetch(`http://localhost:8080/admin/allTutorials`),
+        loader: () => fetch(`https://programminghero-job-ta-backend.vercel.app/admin/allTutorials`),
       },
     ],
   },
@@ -75,9 +80,9 @@ export const router = createBrowserRouter([
           // Fetch both vocabularies and lessons concurrently
           const [vocabulariesResponse, lessonsResponse, usersResponse] =
             await Promise.all([
-              fetch("http://localhost:8080/admin/allVocabularies"),
-              fetch("http://localhost:8080/admin/allLessons"),
-              fetch("http://localhost:8080/admin/allUsers"),
+              fetch("https://programminghero-job-ta-backend.vercel.app/admin/allVocabularies"),
+              fetch("https://programminghero-job-ta-backend.vercel.app/admin/allLessons"),
+              fetch("https://programminghero-job-ta-backend.vercel.app/admin/allUsers"),
             ]);
           // Wait for responses to be converted to JSON
           const vocabularies = await vocabulariesResponse.json();
@@ -91,19 +96,19 @@ export const router = createBrowserRouter([
       {
         path: "/admin/allLessons",
         element: <PrivateRoute><RouteAccess><A_allLessons /></RouteAccess></PrivateRoute>,
-        loader: () => fetch(`http://localhost:8080/lessons`),
+        loader: () => fetch(`https://programminghero-job-ta-backend.vercel.app/lessons`),
       },
       {
         path: "/admin/allLessons/:id",
         element: <PrivateRoute><RouteAccess><A_lessonDetails /></RouteAccess></PrivateRoute>,
         loader: ({ params }) =>
-          fetch(`http://localhost:8080/admin/allLessons/${params.id}`),
+          fetch(`https://programminghero-job-ta-backend.vercel.app/admin/allLessons/${params.id}`),
       },
       {
         path: "/admin/allLessons/edit/:id",
         element: <PrivateRoute><RouteAccess><A_editLesson /></RouteAccess></PrivateRoute>,
         loader: ({ params }) =>
-          fetch(`http://localhost:8080/admin/allLessons/edit/${params.id}`),
+          fetch(`https://programminghero-job-ta-backend.vercel.app/admin/allLessons/edit/${params.id}`),
       },
       {
         path: "/admin/allVocabularies",
@@ -111,8 +116,8 @@ export const router = createBrowserRouter([
         loader: async () => {
           // Fetch both vocabularies and lessons concurrently
           const [vocabulariesResponse, lessonsResponse] = await Promise.all([
-            fetch("http://localhost:8080/admin/allVocabularies"),
-            fetch("http://localhost:8080/admin/allLessons"),
+            fetch("https://programminghero-job-ta-backend.vercel.app/admin/allVocabularies"),
+            fetch("https://programminghero-job-ta-backend.vercel.app/admin/allLessons"),
           ]);
 
           // Parse both responses as JSON
@@ -127,31 +132,31 @@ export const router = createBrowserRouter([
         path: "/admin/allVocabularies/:id",
         element: <PrivateRoute><RouteAccess><A_vocabDetails /></RouteAccess></PrivateRoute>,
         loader: ({ params }) =>
-          fetch(`http://localhost:8080/admin/allVocabularies/${params.id}`),
+          fetch(`https://programminghero-job-ta-backend.vercel.app/admin/allVocabularies/${params.id}`),
       },
       {
         path: "/admin/allVocabularies/edit/:id",
         element: <PrivateRoute><RouteAccess><A_editVocabulary /></RouteAccess></PrivateRoute>,
         loader: ({ params }) =>
           fetch(
-            `http://localhost:8080/admin/allVocabularies/edit/${params.id}`
+            `https://programminghero-job-ta-backend.vercel.app/admin/allVocabularies/edit/${params.id}`
           ),
       },
       {
         path: "/admin/allTutorials",
         element: <PrivateRoute><RouteAccess><A_allTutorials /></RouteAccess></PrivateRoute>,
-        loader: () => fetch(`http://localhost:8080/admin/allTutorials`),
+        loader: () => fetch(`https://programminghero-job-ta-backend.vercel.app/admin/allTutorials`),
       },
       {
         path: "/admin/allTutorials/edit/:id",
         element: <PrivateRoute><RouteAccess><A_editTutorial /></RouteAccess></PrivateRoute>,
         loader: ({ params }) =>
-          fetch(`http://localhost:8080/admin/allTutorials/edit/${params.id}`),
+          fetch(`https://programminghero-job-ta-backend.vercel.app/admin/allTutorials/edit/${params.id}`),
       },
       {
         path: "/admin/allUsers",
         element: <PrivateRoute><RouteAccess><A_allUsers /></RouteAccess></PrivateRoute>,
-        loader: () => fetch(`http://localhost:8080/admin/allUsers`),
+        loader: () => fetch(`https://programminghero-job-ta-backend.vercel.app/admin/allUsers`),
       },
       {
         path: "/admin/addLessons",

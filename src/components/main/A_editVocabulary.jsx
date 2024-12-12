@@ -17,7 +17,7 @@ const A_editVocabulary = ({ onSave }) => {
     e.preventDefault();
     const updatedVocabulary = { word, meaning, pronunciation, whenToSay, lessonNo };
 
-    fetch(`http://localhost:8080/admin/allVocabularies/${vocabulary._id}`, {
+    fetch(`https://programminghero-job-ta-backend.vercel.app/admin/allVocabularies/${vocabulary._id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

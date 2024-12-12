@@ -49,7 +49,7 @@ const handleInputChange = (e) => {
     e.preventDefault();
 
 
-    fetch(`http://localhost:8080/admin/allTutorials/${tutorialData._id}`, {
+    fetch(`https://programminghero-job-ta-backend.vercel.app/admin/allTutorials/${tutorialData._id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
